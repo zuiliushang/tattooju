@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+	<!-- Class Driver Path -->
+	<!--<classPathEntry location="mysql-connector-java-5.1.36.jar"/> -->
+
+	<context id="context" targetRuntime="MyBatis3Simple">
+
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+
+		<property name="mergeable" value="true"></property>
+
+		<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+			<property name="mappers" value="tk.mybatis.mapper.common.Mapper" />
+			<!-- caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true -->
+			<property name="caseSensitive" value="false" />
+
+		</plugin>
+ 
+		<commentGenerator>
+			<!-- This property is used to specify whether MBG will include any coments
+				in the generated code -->
+			<property name="suppressAllComments" value="true" />
+			<!-- This property is used to specify whether MBG will include the generation
+				timestamp in the generated comments -->
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+
+ 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://39.106.205.81:3306/tattooju_dev" userId="root"
+			password="tattooju@MysqlAdmin" />
+
+
+
+		<javaTypeResolver>
+			<!-- This property is used to specify whether MyBatis Generator should
+				force the use of java.math.BigDecimal for DECIMAL and NUMERIC fields, rather
+				than substituting integral types when possible -->
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.tattooju.entity"
+			targetProject=".\src\main\java">
+			<!--D:\pbx\workspace\tahiti-cms\tahiti-cms-db-->
+
+
+			<!-- This property is used to select whether MyBatis Generator will generate
+				different Java packages for the objects based on the catalog and schema of
+				the introspected table -->
+			<property name="enableSubPackages" value="false" />
+			<!-- This property is used to select whether MyBatis Generator adds code
+				to trim the white space from character fields returned from the database -->
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+
+		<sqlMapGenerator targetPackage="mapper"
+			targetProject=".\src\main\resources\config">
+			<!--D:\pbx\workspace\tahiti-cms\tahiti-cms-db-->
+
+			<!-- This property is used to select whether MyBatis Generator will generate
+				different Java packages for the objects based on the catalog and schema of
+				the introspected table -->
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator targetPackage="com.tattooju.entity"
+			targetProject=".\src\main\java" type="XMLMAPPER">
+			<!--D:\pbx\workspace\tahiti-cms\tahiti-cms-db-->
+			<!-- This property is used to select whether MyBatis Generator will generate
+				different Java packages for the objects based on the catalog and schema of
+				the introspected table -->
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+
+
+	 	<!-- <table tableName="tableName" domainObjectName="ClassName" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
+			identity="true" /> </table>  -->
+			<table tableName="tbl_article" domainObjectName="Article" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table> 
+			<table tableName="tbl_media" domainObjectName="Media" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table> 
+			<table tableName="tbl_media_tag" domainObjectName="MediaTag" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table> 
+			<table tableName="tbl_reserve" domainObjectName="Reserve" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table> 
+			<table tableName="tbl_tag" domainObjectName="Tag" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table> 
+			<table tableName="tbl_wechar_user" domainObjectName="WecharUser" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table> 
+	</context>
+</generatorConfiguration>

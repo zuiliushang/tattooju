@@ -1,0 +1,25 @@
+server: 
+  port: 8080
+spring: 
+  application: 
+    name: tattooju
+  datasource: 
+    driver-class-name: com.mysql.jdbc.Driver
+    password: Admin@123
+    url: "jdbc:mysql://192.168.1.140:3306/tahiti?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
+    username: admin
+mapper: 
+  identity: MYSQL
+  mappers: tk.mybatis.mapper.common.Mapper
+  not-empty: false
+mybatis: 
+  configuration: 
+    default-statement-timeout: 300
+    mapUnderscoreToCamelCase: true
+  mapper-locations: "classpath*:config/mapper/*.xml"
+  type-aliases-package: com.fl21.cloud.hereport.entity
+pagehelper: 
+  helperDialect: mysql
+  params: count=countSql
+  reasonable: true
+  supportMethodsArguments: true
