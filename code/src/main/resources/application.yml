@@ -5,9 +5,9 @@ spring:
     name: tattooju
   datasource: 
     driver-class-name: com.mysql.jdbc.Driver
-    password: 
-    url: "jdbc:mysql://?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
-    username: 
+    password: admin@123
+    url: "jdbc:mysql://39.106.205.81:3306/tattooju_dev?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
+    username: admin
 mapper: 
   identity: MYSQL
   mappers: tk.mybatis.mapper.common.Mapper
@@ -17,7 +17,7 @@ mybatis:
     default-statement-timeout: 300
     mapUnderscoreToCamelCase: true
   mapper-locations: "classpath*:config/mapper/*.xml"
-  type-aliases-package: com.fl21.cloud.hereport.entity
+  type-aliases-package: com.tattooju.entity
 pagehelper: 
   helperDialect: mysql
   params: count=countSql
