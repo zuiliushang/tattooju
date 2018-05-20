@@ -5,9 +5,9 @@ spring:
     name: tattooju
   datasource: 
     driver-class-name: com.mysql.jdbc.Driver
-    password: Admin@123
-    url: "jdbc:mysql://192.168.1.140:3306/tahiti?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
-    username: admin
+    password: 
+    url: "jdbc:mysql://?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
+    username: 
 mapper: 
   identity: MYSQL
   mappers: tk.mybatis.mapper.common.Mapper
