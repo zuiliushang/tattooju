@@ -1,0 +1,30 @@
+server: 
+  port: 8081
+spring:
+  application: 
+    name: tattooju
+  datasource: 
+    driver-class-name: com.mysql.jdbc.Driver
+    password: admin@123
+    url: "jdbc:mysql://39.106.205.81:3306/tattooju_dev?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
+    username: admin
+  redis:
+    database: 0
+    host: 39.106.205.81
+    port: 6379
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 300
+      max-wait: -1
+wechat:
+  url: 
+    appId: 
+    appSecret: 
+token:
+  verify:
+    switch: false
+    ttl: 30
+  interceptor:
+    exclude: 
+      url: /**.html,/user/

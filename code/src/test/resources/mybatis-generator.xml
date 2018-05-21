@@ -81,7 +81,7 @@
 	 	<!-- <table tableName="tableName" domainObjectName="ClassName" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
 			identity="true" /> </table>  -->
-			<table tableName="tbl_article" domainObjectName="Article" delimitIdentifiers="true"
+			<!-- <table tableName="tbl_article" domainObjectName="Article" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"></table> 
 			<table tableName="tbl_media" domainObjectName="Media" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"></table> 
@@ -90,8 +90,8 @@
 			<table tableName="tbl_reserve" domainObjectName="Reserve" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"></table> 
 			<table tableName="tbl_tag" domainObjectName="Tag" delimitIdentifiers="true"
-			delimitAllColumns="true" enableInsert="true"></table> 
-			<table tableName="tbl_wechar_user" domainObjectName="WecharUser" delimitIdentifiers="true"
-			delimitAllColumns="true" enableInsert="true"></table> 
+			delimitAllColumns="true" enableInsert="true"></table>  -->
+			<!-- <table tableName="tbl_wechat_account" domainObjectName="WechatAccount" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table>  -->
 	</context>
 </generatorConfiguration>

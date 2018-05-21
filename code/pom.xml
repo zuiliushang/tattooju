@@ -19,6 +19,7 @@
 		<mybatis.generator.version>1.3.5</mybatis.generator.version>
 		<hibernate.jpa.version>1.0.1.Final</hibernate.jpa.version>
 		<fastjson.version>1.2.45</fastjson.version>
+		<jjwt.version>0.7.0</jjwt.version>
 	</properties>
 
 	<parent> 
@@ -42,9 +43,20 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+		</dependency>
 		<!-- mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -107,6 +119,12 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>${fastjson.version}</version>
+		</dependency>
+		<!-- jwt -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jjwt.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

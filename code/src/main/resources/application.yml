@@ -1,13 +1,6 @@
-server: 
-  port: 8080
 spring: 
-  application: 
-    name: tattooju
-  datasource: 
-    driver-class-name: com.mysql.jdbc.Driver
-    password: admin@123
-    url: "jdbc:mysql://39.106.205.81:3306/tattooju_dev?autoReconnect=true&initialTimeout=3&useUnicode=true&characterEncoding=utf-8&useSSL=false"
-    username: admin
+  profiles:
+    active: dev
 mapper: 
   identity: MYSQL
   mappers: tk.mybatis.mapper.common.Mapper
