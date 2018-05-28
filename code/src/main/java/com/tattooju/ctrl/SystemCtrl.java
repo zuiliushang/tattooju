@@ -32,7 +32,14 @@ public class SystemCtrl {
 	public String upload() throws IOException, MyException {
 		String file = "E:\\test.png";
 		byte[] bs = Files.readAllBytes(new File(file).toPath());
-		String[] result = storageClient.upload_file(bs, "png", null);
+		String[] result;
+		try {
+			result = storageClient.upload_file(bs, "png", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = storageClient.upload_file(bs, "png", null);
+			return "aa";
+			}
 		Stream.of(result).forEach(System.out::println);
 		return result[0];
 	}

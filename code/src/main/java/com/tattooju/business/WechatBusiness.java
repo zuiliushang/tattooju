@@ -1,18 +1,34 @@
 package com.tattooju.business;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.tattooju.config.Constant;
+import com.tattooju.config.ResponseCode;
 import com.tattooju.config.TattoojuProperties;
+import com.tattooju.dto.WechatAccountDto;
+import com.tattooju.entity.WechatAccount;
+import com.tattooju.exception.CommonException;
+import com.tattooju.service.WechatAccountService;
+import com.tattooju.status.AccountRoleEnum;
 import com.tattooju.util.HttpResponseContent;
 import com.tattooju.util.HttpUtil;
+import com.tattooju.util.JwtUtil;
+
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * 
@@ -27,6 +43,63 @@ public class WechatBusiness {
 	
 	@Autowired
 	TattoojuProperties properties;
+	
+	@Autowired
+	StringRedisTemplate stringRedisTemplate;
+	
+	@Autowired
+	WechatAccountService wechatAccountService;
+	
+	@Transactional(rollbackFor=CommonException.class)
+	public WechatAccountDto bindWechat(String code) throws Exception {
+		// 获取openId
+		String accessTokenOpenIdString = getOpenId(code);
+		Map<String, Object> dataMap = parseOpenIdAndAccessToken(accessTokenOpenIdString);
+		String openId = (String) dataMap.get("openid");
+		// 查询openID是否绑定用户
+		Example wechatAccountExample = new Example(WechatAccount.class);
+		wechatAccountExample
+			.createCriteria()
+			.andEqualTo("openId", openId);
+		List<WechatAccount> wechatAccounts = wechatAccountService.selectByExample(wechatAccountExample);
+		String wechatRespContent = getUserInfo(accessTokenOpenIdString);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> weChatUserInfoMap = JSON.parseObject(wechatRespContent, Map.class);
+		WechatAccountDto dto = new WechatAccountDto();
+		dto.setHeadimgurl((String)weChatUserInfoMap.get("headimgurl"));
+		dto.setOpenId(openId);
+		dto.setUserName((String) weChatUserInfoMap.get("nickname"));
+		if (CollectionUtils.isEmpty(wechatAccounts)) { // 空的话 绑定一个
+			WechatAccount wechatAccount = new WechatAccount();
+			wechatAccount.setOpenId(openId);
+			wechatAccount.setRole(AccountRoleEnum.ACCOUNT.value());
+			int row = wechatAccountService.saveNotNull(wechatAccount);
+			if (row < 1) {
+				throw new CommonException(ResponseCode.FAILED);
+			}
+			// 查找最后的插入的ID
+			int id = wechatAccountService.getLastId();
+			// 生成token
+			wechatAccount.setId(id);
+			//获取token
+			String token = JwtUtil.createJWT(wechatAccount, JwtUtil.JWT_SECRET, 0);
+			String key = Constant.PREFIX_ACCOUNT_TOKEN + id;
+			stringRedisTemplate.opsForValue().set(key, token, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
+			dto.setToken(token);
+		}else {// 不为空
+			WechatAccount account = wechatAccounts.get(0);
+			String key = Constant.PREFIX_ACCOUNT_TOKEN + account.getId();
+			String cachedToken = stringRedisTemplate.opsForValue().get(key);
+			if (StringUtils.isEmpty(cachedToken)) {
+				stringRedisTemplate.opsForValue().set(key, cachedToken, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
+				dto.setToken(cachedToken);
+			}else {
+				stringRedisTemplate.expire(key, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
+				dto.setToken(cachedToken);
+			}
+		}
+		return dto;
+	}
 	
 	/**
 	 * 根据前端传过来的code，走微信的oauth2的流程，获取access_token和openId，<br>

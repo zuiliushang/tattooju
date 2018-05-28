@@ -123,7 +123,7 @@ public class JwtUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Long getUserId(String key,String jwt) throws Exception{
+	public static Integer getUserId(String key,String jwt) throws Exception{
 		Claims claims=parseJWT(key,jwt);
 		return getUserId(claims);
 	}
@@ -134,25 +134,25 @@ public class JwtUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Long getUserId(Claims claims) throws Exception{
+	public static Integer getUserId(Claims claims) throws Exception{
 		if(claims==null){
 			logger.error("claims为null");
 			 throw new CommonException(ResponseCode.FAILED.getValue(),"token解析出的数据为空"); 
 		}
 		
 		Object userIdObj= claims.get(JwtUtil.JWT_CLAIM_ACCOUNT_ID);
-		Long currentUserId=null;
+		Integer currentUserId=null;
 		if(userIdObj==null){
 			throw new CommonException(ResponseCode.FAILED.getValue(),"访问令牌中用户id不存在"); 
 		}
 		
 		if(userIdObj instanceof Integer){
-			 currentUserId=((Integer) userIdObj).longValue();
+			 currentUserId=((Integer) userIdObj);
 		 }else if(userIdObj instanceof Long){
-			 currentUserId=((Long) userIdObj).longValue();
+			 currentUserId=((Integer) userIdObj);
 		 }else if(userIdObj instanceof String){
 			 try {
-				currentUserId=Long.valueOf((String)userIdObj);
+				currentUserId=Integer.valueOf((String)userIdObj);
 			} catch (Exception e) {
 				logger.error("userId={}不是有效的数字类型.",(String)userIdObj,e);
 				 throw new CommonException(ResponseCode.FAILED.getValue(),"用户id数据类型不正确.");  
@@ -166,7 +166,7 @@ public class JwtUtil {
 	
 	 public static void main(String[] args) throws Exception {
 		WechatAccount u=new WechatAccount();
-		u.setId(5415157805088768L);
+		u.setId(1);
 		String token=JwtUtil.createJWT(u, JwtUtil.JWT_SECRET, 0);
 		 System.out.println(JwtUtil.createJWT(u, JwtUtil.JWT_SECRET, 0));
 		Claims c= JwtUtil.parseJWT(JwtUtil.JWT_SECRET, token);

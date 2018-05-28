@@ -9,7 +9,7 @@ public class WechatAccount {
      */
     @Id
     @Column(name = "`id`")
-    private Long id;
+    private Integer id;
 
     /**
      * openid
@@ -34,7 +34,7 @@ public class WechatAccount {
      *
      * @return id - 主键
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -43,7 +43,7 @@ public class WechatAccount {
      *
      * @param id 主键
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

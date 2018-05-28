@@ -29,7 +29,9 @@ token:
     exclude: 
       url: /**.html,/user/
 fdfs:
-  connect_timeout: 2
+  connect_timeout: 30
   network_timeout: 30
   charset: UTF-8
   tracker_server: 39.106.205.81:22122
+  nginx:
+    path: http://39.106.205.81:8888

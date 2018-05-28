@@ -9,7 +9,8 @@ public class Tag {
      */
     @Id
     @Column(name = "`id`")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     /**
      * 标签名字
@@ -22,7 +23,7 @@ public class Tag {
      *
      * @return id - 主键
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -31,7 +32,7 @@ public class Tag {
      *
      * @param id 主键
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

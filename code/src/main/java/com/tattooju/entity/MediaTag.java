@@ -9,26 +9,27 @@ public class MediaTag {
      */
     @Id
     @Column(name = "`id`")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     /**
      * media主键
      */
     @Column(name = "`media_id`")
-    private Long mediaId;
+    private Integer mediaId;
 
     /**
      * 标签Id
      */
     @Column(name = "`tag_id`")
-    private Long tagId;
+    private Integer tagId;
 
     /**
      * 获取ID
      *
      * @return id - ID
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -37,7 +38,7 @@ public class MediaTag {
      *
      * @param id ID
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -46,7 +47,7 @@ public class MediaTag {
      *
      * @return media_id - media主键
      */
-    public Long getMediaId() {
+    public Integer getMediaId() {
         return mediaId;
     }
 
@@ -55,7 +56,7 @@ public class MediaTag {
      *
      * @param mediaId media主键
      */
-    public void setMediaId(Long mediaId) {
+    public void setMediaId(Integer mediaId) {
         this.mediaId = mediaId;
     }
 
@@ -64,7 +65,7 @@ public class MediaTag {
      *
      * @return tag_id - 标签Id
      */
-    public Long getTagId() {
+    public Integer getTagId() {
         return tagId;
     }
 
@@ -73,7 +74,7 @@ public class MediaTag {
      *
      * @param tagId 标签Id
      */
-    public void setTagId(Long tagId) {
+    public void setTagId(Integer tagId) {
         this.tagId = tagId;
     }
 }

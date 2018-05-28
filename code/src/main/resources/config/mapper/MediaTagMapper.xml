@@ -5,8 +5,8 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="media_id" jdbcType="BIGINT" property="mediaId" />
-    <result column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="media_id" jdbcType="INTEGER" property="mediaId" />
+    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
   </resultMap>
 </mapper>

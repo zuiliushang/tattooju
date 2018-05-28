@@ -10,7 +10,8 @@ public class Article {
      */
     @Id
     @Column(name = "`id`")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     /**
      * 封面
@@ -53,7 +54,7 @@ public class Article {
      *
      * @return id - ID
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -62,7 +63,7 @@ public class Article {
      *
      * @param id ID
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

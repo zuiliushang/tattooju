@@ -3,6 +3,8 @@ package com.tattooju.entity;
 import java.util.Date;
 import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Table(name = "`tbl_reserve`")
 public class Reserve {
     /**
@@ -10,13 +12,14 @@ public class Reserve {
      */
     @Id
     @Column(name = "`id`")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     /**
      * 预约用户ID
      */
-    @Column(name = "`user_id`")
-    private Long userId;
+    @Column(name = "`account_id`")
+    private Integer accountId;
 
     /**
      * 选择的部位 "," 隔开
@@ -59,7 +62,7 @@ public class Reserve {
      *
      * @return id - 预约主键
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -68,26 +71,26 @@ public class Reserve {
      *
      * @param id 预约主键
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     /**
      * 获取预约用户ID
      *
-     * @return user_id - 预约用户ID
+     * @return account_id - 预约用户ID
      */
-    public Long getUserId() {
-        return userId;
+    public Integer getAccountId() {
+        return accountId;
     }
 
     /**
      * 设置预约用户ID
      *
-     * @param userId 预约用户ID
+     * @param accountId 预约用户ID
      */
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     /**
@@ -131,6 +134,7 @@ public class Reserve {
      *
      * @return reserve_time - 预约时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getReserveTime() {
         return reserveTime;
     }

@@ -28,6 +28,9 @@ public class FastdfsConfig {
 	@Value("${fdfs.charset}")
 	private String charset;
 	
+	@Value("${fdfs.nginx.path}")
+	private String fdfsNginxPath;
+	
 	@Bean
 	public StorageClient1 storageClient() throws IOException, MyException {
 		Properties properties = new Properties();
@@ -42,5 +45,11 @@ public class FastdfsConfig {
 		StorageClient1 storageClient = new StorageClient1(trackerServer, storageServer);
 		return storageClient;
 	}
+
+	public String getFdfsNginxPath() {
+		return fdfsNginxPath;
+	}
+	
+	
 	
 }

@@ -10,7 +10,8 @@ public class Media {
      */
     @Id
     @Column(name = "`id`")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     /**
      * 对象地址
@@ -35,7 +36,7 @@ public class Media {
      *
      * @return id - 主键
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -44,7 +45,7 @@ public class Media {
      *
      * @param id 主键
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
