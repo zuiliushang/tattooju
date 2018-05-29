@@ -90,9 +90,7 @@ public class JwtUtil {
 			.claim(JWT_CLAIM_NONCE, nonce)
 		    .signWith(signatureAlgorithm, key);
 		
-		if(!StringUtils.isEmpty(wechatAccount.getWxAccount())) {
-			builder.setSubject(wechatAccount.getWxAccount());
-		}else if(!StringUtils.isEmpty(wechatAccount.getRole()+"")) {
+		if(!StringUtils.isEmpty(wechatAccount.getRole()+"")) {
 			builder.setSubject(wechatAccount.getRole()+"");
 		}
 		//不设置过期时间,使用随机字符串代替

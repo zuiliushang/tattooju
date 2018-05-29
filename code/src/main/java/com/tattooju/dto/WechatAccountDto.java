@@ -5,7 +5,7 @@ public class WechatAccountDto {
 	/**
 	 * 微信用户名
 	 */
-	private String userName;
+	private String nickName;
 	
 	/**
 	 * 微信的OpenId
@@ -18,16 +18,29 @@ public class WechatAccountDto {
 	private String headimgurl;
 
 	/**
+	 * 性别
+	 */
+	private byte sex;
+	
+	/**
 	 * 登录凭证
 	 */
 	private String token;
 
-	public String getUserName() {
-		return userName;
+	public byte getSex() {
+		return sex;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setSex(byte sex) {
+		this.sex = sex;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getOpenId() {

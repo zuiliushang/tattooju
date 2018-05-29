@@ -83,20 +83,17 @@
 			identity="true" /> </table>  -->
 			<!-- <table tableName="tbl_article" domainObjectName="Article" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
-			identity="true" /></table> 
-			<table tableName="tbl_media" domainObjectName="Media" delimitIdentifiers="true"
+			identity="true" /></table> -->
+			<!-- <table tableName="tbl_media" domainObjectName="Media" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
-			identity="true" /></table> 
-			<table tableName="tbl_media_tag" domainObjectName="MediaTag" delimitIdentifiers="true"
+			identity="true" /></table> --> 
+			<!-- <table tableName="tbl_reserve" domainObjectName="Reserve" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
+			identity="true" /></table> -->
+			<!--  <table tableName="tbl_wechat_account" domainObjectName="WechatAccount" delimitIdentifiers="true"
+			delimitAllColumns="true" enableInsert="true"></table>  -->
+			<!--<table tableName="tbl_article_comment" domainObjectName="ArticleComment" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
 			identity="true" /></table>  -->
-			<table tableName="tbl_reserve" domainObjectName="Reserve" delimitIdentifiers="true"
-			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
-			identity="true" /></table>
-			<!-- <table tableName="tbl_tag" domainObjectName="Tag" delimitIdentifiers="true"
-			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
-			identity="true" /></table>  
-			 <table tableName="tbl_wechat_account" domainObjectName="WechatAccount" delimitIdentifiers="true"
-			delimitAllColumns="true" enableInsert="true"></table> --> 
 	</context>
 </generatorConfiguration>

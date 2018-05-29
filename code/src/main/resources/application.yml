@@ -1,6 +1,14 @@
 spring: 
   profiles:
     active: dev
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss"
+    #default-property-inclusion: NON_NULL
+    deserialization: 
+      fail-on-unknown-properties: false
+    serialization: 
+      indent-output: true
+    time-zone: GMT+8
 mapper: 
   identity: MYSQL
   mappers: tk.mybatis.mapper.common.Mapper

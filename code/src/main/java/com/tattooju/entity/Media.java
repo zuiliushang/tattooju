@@ -14,6 +14,12 @@ public class Media {
     private Integer id;
 
     /**
+     * 内容
+     */
+    @Column(name = "`content`")
+    private String content;
+
+    /**
      * 对象地址
      */
     @Column(name = "`media_path`")
@@ -32,6 +38,12 @@ public class Media {
     private Date createTime;
 
     /**
+     * 用逗号隔开的tag
+     */
+    @Column(name = "`tag_content`")
+    private String tagContent;
+
+    /**
      * 获取主键
      *
      * @return id - 主键
@@ -47,6 +59,24 @@ public class Media {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * 获取内容
+     *
+     * @return content - 内容
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * 设置内容
+     *
+     * @param content 内容
+     */
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     /**
@@ -101,5 +131,23 @@ public class Media {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取用逗号隔开的tag
+     *
+     * @return tag_content - 用逗号隔开的tag
+     */
+    public String getTagContent() {
+        return tagContent;
+    }
+
+    /**
+     * 设置用逗号隔开的tag
+     *
+     * @param tagContent 用逗号隔开的tag
+     */
+    public void setTagContent(String tagContent) {
+        this.tagContent = tagContent == null ? null : tagContent.trim();
     }
 }

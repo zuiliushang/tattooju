@@ -756,4 +756,26 @@ public class DateUtil {
 		}
 		return null;
 	}
+    
+  //获取凌晨时间
+    public static Date getTodayStartTime(Date date){
+        Calendar todayEnd = Calendar.getInstance();
+        todayEnd.setTime(date);
+        todayEnd.set(Calendar.HOUR_OF_DAY, 0);
+        todayEnd.set(Calendar.MINUTE, 5);
+        todayEnd.set(Calendar.SECOND, 0);
+        todayEnd.set(Calendar.MILLISECOND, 0);
+        return todayEnd.getTime();
+    }
+    //获取半夜23:59:59
+    public static Date getTodayEnd(Date date){
+        Calendar todayEnd = Calendar.getInstance();
+        todayEnd.setTime(date);
+        todayEnd.set(Calendar.MINUTE, 59);
+        todayEnd.set(Calendar.SECOND, 59);
+        todayEnd.set(Calendar.MILLISECOND, 0);
+        todayEnd.set(Calendar.HOUR_OF_DAY, 23);
+        return todayEnd.getTime();
+    }
+    
 }

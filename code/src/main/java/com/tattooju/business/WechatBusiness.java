@@ -68,11 +68,15 @@ public class WechatBusiness {
 		WechatAccountDto dto = new WechatAccountDto();
 		dto.setHeadimgurl((String)weChatUserInfoMap.get("headimgurl"));
 		dto.setOpenId(openId);
-		dto.setUserName((String) weChatUserInfoMap.get("nickname"));
+		dto.setSex((Byte)weChatUserInfoMap.get("sex"));
+		dto.setNickName((String) weChatUserInfoMap.get("nickname"));
 		if (CollectionUtils.isEmpty(wechatAccounts)) { // 空的话 绑定一个
 			WechatAccount wechatAccount = new WechatAccount();
 			wechatAccount.setOpenId(openId);
+			wechatAccount.setSex(dto.getSex());
 			wechatAccount.setRole(AccountRoleEnum.ACCOUNT.value());
+			wechatAccount.setHeadImgUrl(dto.getHeadimgurl());
+			wechatAccount.setNickname(dto.getNickName());
 			int row = wechatAccountService.saveNotNull(wechatAccount);
 			if (row < 1) {
 				throw new CommonException(ResponseCode.FAILED);
@@ -88,6 +92,10 @@ public class WechatBusiness {
 			dto.setToken(token);
 		}else {// 不为空
 			WechatAccount account = wechatAccounts.get(0);
+			account.setHeadImgUrl(dto.getHeadimgurl());
+			account.setSex(dto.getSex());
+			account.setNickname(dto.getNickName());
+			wechatAccountService.updateNotNull(account);//获取更新
 			String key = Constant.PREFIX_ACCOUNT_TOKEN + account.getId();
 			String cachedToken = stringRedisTemplate.opsForValue().get(key);
 			if (StringUtils.isEmpty(cachedToken)) {

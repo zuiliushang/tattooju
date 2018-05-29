@@ -7,8 +7,12 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="wx_account" jdbcType="VARCHAR" property="wxAccount" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
     <result column="role" jdbcType="TINYINT" property="role" />
+    <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   
   <select id="getLastId" resultType="java.lang.Integer">

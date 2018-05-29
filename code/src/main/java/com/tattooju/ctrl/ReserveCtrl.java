@@ -1,6 +1,9 @@
 package com.tattooju.ctrl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.tattooju.business.ReserveBusiness;
 import com.tattooju.config.ResponseContent;
+import com.tattooju.dto.ReserveDto;
 import com.tattooju.entity.Reserve;
 import com.tattooju.exception.CommonException;
 import com.tattooju.exception.NullParamException;
@@ -57,7 +62,7 @@ public class ReserveCtrl {
 	@GetMapping()
 	@ResponseBody
 	public ResponseContent getReserveById(@RequestParam(required=true) int id) {
-		Reserve reserve = reserveBusiness.getReserveById(id);
+		ReserveDto reserve = reserveBusiness.getReserveById(id);
 		return ResponseContent.ok(reserve);
 	}
 	
@@ -66,9 +71,10 @@ public class ReserveCtrl {
 	public ResponseContent getReserveList(
 			@RequestParam(required=true) int accountId,
 			@RequestParam(defaultValue="1") int pageNum,
-			@RequestParam(defaultValue="10") int pageSize) {
-		
-		return null;
+			@RequestParam(defaultValue="10") int pageSize,
+			@DateTimeFormat(pattern = "yyyy-MM-dd") Date date) throws CommonException {
+		PageInfo<ReserveDto> result = reserveBusiness.getReserveList(accountId, pageNum, pageSize, date);
+		return ResponseContent.ok(result);
 	}
 	
 }

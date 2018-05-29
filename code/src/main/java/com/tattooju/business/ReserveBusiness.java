@@ -1,21 +1,28 @@
 package com.tattooju.business;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tattooju.config.ResponseCode;
+import com.tattooju.dto.ReserveDto;
 import com.tattooju.entity.Reserve;
 import com.tattooju.entity.WechatAccount;
 import com.tattooju.exception.CommonException;
 import com.tattooju.service.ReserveService;
 import com.tattooju.service.WechatAccountService;
 import com.tattooju.status.AccountRoleEnum;
+import com.tattooju.status.ReserveStatus;
+import com.tattooju.util.DateUtil;
 
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
 public class ReserveBusiness {
@@ -57,24 +64,66 @@ public class ReserveBusiness {
 		}
 		int row = reserveService.updateNotNull(reserve);
 		if (row < 1) {
-			throw new CommonException(ResponseCode.FAILED);
+			throw new CommonException(ResponseCode.FAILED.getValue(),"更新出错");
 		}
 	}
 
-	public Reserve getReserveById(int id) {
-		return reserveService.selectByKey(id);
+	public ReserveDto getReserveById(int id) {
+		Reserve reserve = reserveService.selectByKey(id);
+		ReserveDto reserveDto = new ReserveDto();
+		reserveDto.setAccountId(reserve.getAccountId());
+		reserveDto.setBody(reserve.getBody());
+		reserveDto.setContent(reserve.getContent());
+		reserveDto.setCreateTime(reserve.getCreateTime());
+		WechatAccount account = wechatAccountService.selectByKey(reserve.getAccountId());
+		reserveDto.setHeadImgUrl(account.getHeadImgUrl());
+		reserveDto.setId(reserve.getId());
+		reserveDto.setMobile(reserve.getMobile());
+		reserveDto.setNickName(account.getNickname());
+		reserveDto.setReserveTime(reserve.getReserveTime());
+		reserveDto.setStatus(reserve.getStatus());
+		reserveDto.setUpdateTime(reserve.getUpdateTime());
+		reserveDto.setWxAccount(reserve.getWxAccount());
+		return reserveDto;
 	}
 	
-	public PageInfo<Reserve> getReserveList(int accountId,int pageNum,int pageSize) throws CommonException{
+	public PageInfo<ReserveDto> getReserveList(int accountId,int pageNum,int pageSize,Date date) throws CommonException{
 		// 查询是不是管理员
 		WechatAccount wechatAccount = wechatAccountService.selectByKey(accountId);
 		if (wechatAccount==null) {
 			throw new CommonException(ResponseCode.FAILED.getValue(),"登录失效,请重新登录");
 		}
-		if (wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {//是管理员就查询全部
-			
+		Example reserveExample = new Example(Reserve.class);
+		Criteria criteria = reserveExample.createCriteria();
+		criteria.andNotEqualTo("status", ReserveStatus.DELETE.value());
+		if (date != null) {
+			criteria.andGreaterThanOrEqualTo("createTime", DateUtil.getTodayStartTime(date));
+			criteria.andLessThanOrEqualTo("createTime", DateUtil.getTodayEnd(date));
 		}
-		return null;
+		if (!wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {//是管理员就查询全部
+			criteria.andEqualTo("accountId", accountId);
+		}
+		reserveExample.orderBy("createTime").desc();
+		PageHelper.startPage(pageNum, pageSize);
+		List<Reserve> reserves = reserveService.selectByExample(reserveExample);
+		List<ReserveDto> reserveDtos = reserves.stream().map(reserve->{
+			ReserveDto reserveDto = new ReserveDto();
+			reserveDto.setAccountId(reserve.getAccountId());
+			reserveDto.setBody(reserve.getBody());
+			reserveDto.setContent(reserve.getContent());
+			reserveDto.setCreateTime(reserve.getCreateTime());
+			WechatAccount account = wechatAccountService.selectByKey(reserve.getAccountId());
+			reserveDto.setHeadImgUrl(account.getHeadImgUrl());
+			reserveDto.setId(reserve.getId());
+			reserveDto.setMobile(reserve.getMobile());
+			reserveDto.setNickName(account.getNickname());
+			reserveDto.setReserveTime(reserve.getReserveTime());
+			reserveDto.setStatus(reserve.getStatus());
+			reserveDto.setUpdateTime(reserve.getUpdateTime());
+			reserveDto.setWxAccount(reserve.getWxAccount());
+			return reserveDto;
+		}).collect(Collectors.toList());
+		return new PageInfo<>(reserveDtos);
 	}
 	
 }

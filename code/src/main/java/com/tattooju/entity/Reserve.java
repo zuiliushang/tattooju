@@ -3,8 +3,6 @@ package com.tattooju.entity;
 import java.util.Date;
 import javax.persistence.*;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 @Table(name = "`tbl_reserve`")
 public class Reserve {
     /**
@@ -20,6 +18,18 @@ public class Reserve {
      */
     @Column(name = "`account_id`")
     private Integer accountId;
+
+    /**
+     * 微信账号
+     */
+    @Column(name = "`wx_account`")
+    private String wxAccount;
+
+    /**
+     * 手机号
+     */
+    @Column(name = "`mobile`")
+    private String mobile;
 
     /**
      * 选择的部位 "," 隔开
@@ -94,6 +104,42 @@ public class Reserve {
     }
 
     /**
+     * 获取微信账号
+     *
+     * @return wx_account - 微信账号
+     */
+    public String getWxAccount() {
+        return wxAccount;
+    }
+
+    /**
+     * 设置微信账号
+     *
+     * @param wxAccount 微信账号
+     */
+    public void setWxAccount(String wxAccount) {
+        this.wxAccount = wxAccount == null ? null : wxAccount.trim();
+    }
+
+    /**
+     * 获取手机号
+     *
+     * @return mobile - 手机号
+     */
+    public String getMobile() {
+        return mobile;
+    }
+
+    /**
+     * 设置手机号
+     *
+     * @param mobile 手机号
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    /**
      * 获取选择的部位 "," 隔开
      *
      * @return body - 选择的部位 "," 隔开
@@ -134,7 +180,6 @@ public class Reserve {
      *
      * @return reserve_time - 预约时间
      */
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getReserveTime() {
         return reserveTime;
     }
