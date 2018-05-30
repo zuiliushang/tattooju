@@ -1,5 +1,5 @@
 server: 
-  port: 8081
+  port: 80
 spring:
   application: 
     name: tattooju
@@ -19,8 +19,8 @@ spring:
       max-wait: -1
 wechat:
   url: 
-    appId: 
-    appSecret: 
+    appId: wxb18ce3e6d926910f
+    appSecret: 7477ec5e523a572c3369e6d95c0b9151
 token:
   verify:
     switch: false
