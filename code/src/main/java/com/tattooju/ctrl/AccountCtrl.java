@@ -19,8 +19,14 @@ public class AccountCtrl {
 	WechatBusiness wechatBusiness;
 	
 	@GetMapping("auth")
-	public ResponseContent wechatAuth(@RequestParam(required=true) String code) throws Exception {
-		WechatAccountDto result = wechatBusiness.bindWechat(code);
+	public ResponseContent wechatAuth(@RequestParam(required=true) String code,
+			@RequestParam(required=true) String iv,
+			@RequestParam(required=true) String encryptedData
+			) throws Exception {
+		System.out.println("============================获取到的code==>"+code);
+		System.out.println("============================获取到的iv==>"+iv);
+		System.out.println("============================获取到的encryptedData==>"+encryptedData);
+		WechatAccountDto result = wechatBusiness.bindWechat(code,iv,encryptedData);
 		return ResponseContent.ok(result);
 	}
 	

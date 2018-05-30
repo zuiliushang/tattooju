@@ -27,6 +27,7 @@ import com.tattooju.status.AccountRoleEnum;
 import com.tattooju.util.HttpResponseContent;
 import com.tattooju.util.HttpUtil;
 import com.tattooju.util.JwtUtil;
+import com.tattooju.util.WXBizDataCrypt;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -51,29 +52,27 @@ public class WechatBusiness {
 	WechatAccountService wechatAccountService;
 	
 	@Transactional(rollbackFor=CommonException.class)
-	public WechatAccountDto bindWechat(String code) throws Exception {
-		// 获取openId
-		String accessTokenOpenIdString = getOpenId(code);
-		Map<String, Object> dataMap = parseOpenIdAndAccessToken(accessTokenOpenIdString);
-		String openId = (String) dataMap.get("openid");
+	public WechatAccountDto bindWechat(String code, String iv, String encryptedData) throws Exception {
+		System.out.println("开始绑定......");
+		
+		Map<String, Object> sessionKeyMap = getAccessToken(code);
+		String sessionKey = (String) sessionKeyMap.get("session_key");
+		String openId = (String) sessionKeyMap.get("openid");
+		System.out.println("获取sessionKey ==============>>>"+sessionKey);
+		System.out.println("获取openId ==============>>>"+openId);
+		
+		WechatAccountDto dto = getUserInfoData(sessionKey,iv,encryptedData);
+		System.out.println("成功获取用户openID=>"+openId);
 		// 查询openID是否绑定用户
 		Example wechatAccountExample = new Example(WechatAccount.class);
 		wechatAccountExample
 			.createCriteria()
 			.andEqualTo("openId", openId);
 		List<WechatAccount> wechatAccounts = wechatAccountService.selectByExample(wechatAccountExample);
-		String wechatRespContent = getUserInfo(accessTokenOpenIdString);
-		@SuppressWarnings("unchecked")
-		Map<String, Object> weChatUserInfoMap = JSON.parseObject(wechatRespContent, Map.class);
-		WechatAccountDto dto = new WechatAccountDto();
-		dto.setHeadimgurl((String)weChatUserInfoMap.get("headimgurl"));
-		dto.setOpenId(openId);
-		dto.setSex((Byte)weChatUserInfoMap.get("sex"));
-		dto.setNickName((String) weChatUserInfoMap.get("nickname"));
 		if (CollectionUtils.isEmpty(wechatAccounts)) { // 空的话 绑定一个
 			WechatAccount wechatAccount = new WechatAccount();
 			wechatAccount.setOpenId(openId);
-			wechatAccount.setSex(dto.getSex());
+			wechatAccount.setSex(dto.getSex().byteValue());
 			wechatAccount.setRole(AccountRoleEnum.ACCOUNT.value());
 			wechatAccount.setHeadImgUrl(dto.getHeadimgurl());
 			wechatAccount.setNickname(dto.getNickName());
@@ -93,7 +92,7 @@ public class WechatBusiness {
 		}else {// 不为空
 			WechatAccount account = wechatAccounts.get(0);
 			account.setHeadImgUrl(dto.getHeadimgurl());
-			account.setSex(dto.getSex());
+			account.setSex(dto.getSex().byteValue());
 			account.setNickname(dto.getNickName());
 			wechatAccountService.updateNotNull(account);//获取更新
 			String key = Constant.PREFIX_ACCOUNT_TOKEN + account.getId();
@@ -108,6 +107,64 @@ public class WechatBusiness {
 		}
 		return dto;
 	}
+	
+	
+	private WechatAccountDto getUserInfoData(String sessionKey, String iv, String encryptedData) throws Exception {
+		WechatAccountDto dto = new WechatAccountDto();
+		System.out.println("=====================");
+		System.out.println("开始解析用户信息");
+		String deString = WXBizDataCrypt.decrypt(encryptedData, sessionKey, iv, "utf-8");
+		System.out.println("获取到解析的用户信息为=>"+deString);
+		//{"openId":"o3fr40MRMG3161w5zUEOR8XNP6Cg",
+		//"nickName":"我要有腹肌了","gender":1,"language":"zh_CN","city":"",
+		//"province":"","country":"China",
+		//"avatarUrl":"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLCsfn0R303kpcKbWbWqZPiaO5zkMibBLgqW9ky595ibQ8T2muQduQrjIFGMZrcQmMiaicobENjiaohUomg/132"
+		//,"watermark":{"timestamp":1527691300,"appid":"wxb18ce3e6d926910f"}}
+		Map<String, Object> userInfoMap = JSON.parseObject(deString,Map.class);
+		dto.setHeadimgurl((String) userInfoMap.get("avatarUrl"));
+		dto.setNickName((String) userInfoMap.get("nickName"));
+		dto.setOpenId((String) userInfoMap.get("openId"));
+		dto.setSex((Integer) userInfoMap.get("gender"));
+		return dto;
+	}
+
+
+	public Map<String, Object> getAccessToken(String jsCode) throws Exception {
+		String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
+		requestUrl = requestUrl.replace("APPID", properties.getWechatAppId());
+        requestUrl = requestUrl.replace("SECRET", properties.getWechatAppSecret());
+        requestUrl = requestUrl.replaceAll("JSCODE", jsCode);
+        System.out.println("debug: => requestURL ="+requestUrl);
+        HttpResponseContent responseContent = null;
+        String result = null;
+        try {
+        	//获取的内容
+        	//{"session_key":"zcBBxE7o0h4pX4yniENWug==","openid":"o3fr40MRMG3161w5zUEOR8XNP6Cg"}
+			responseContent = HttpUtil.getUrlRespContent(requestUrl);
+			result = responseContent.getContent();
+			System.out.println(result);
+			if (result == null) {
+				throw new Exception("获取sessionKey时微信服务器无响应,请重新进入!");
+			}
+
+			if (result.contains("errcode")) {
+				logger.error("获取sessionKey时从微信服务器返回的响应信息中有错误,{}", result);
+				throw new Exception("获取sessionKey时微信服务器返回错误信息:" + result);
+			}
+		} catch (HttpException | IOException e) {
+			throw new Exception("获取sessionKey错误" + result);
+		}
+        Map<String, Object> sessionKeyMap = JSON.parseObject(result, Map.class);
+        return sessionKeyMap;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * 根据前端传过来的code，走微信的oauth2的流程，获取access_token和openId，<br>

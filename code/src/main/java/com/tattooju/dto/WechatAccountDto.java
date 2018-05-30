@@ -20,18 +20,18 @@ public class WechatAccountDto {
 	/**
 	 * 性别
 	 */
-	private byte sex;
+	private Integer sex;
 	
 	/**
 	 * 登录凭证
 	 */
 	private String token;
 
-	public byte getSex() {
+	public Integer getSex() {
 		return sex;
 	}
 
-	public void setSex(byte sex) {
+	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
 
