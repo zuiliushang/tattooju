@@ -25,7 +25,6 @@ public class ArticleCtrl {
 	ArticleBusiness articleBusiness;
 	
 	@PostMapping
-	@ResponseBody
 	public ResponseContent addArticle(
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) String coverImg,
@@ -39,7 +38,6 @@ public class ArticleCtrl {
 	}
 	
 	@PutMapping
-	@ResponseBody
 	public ResponseContent updateArticle(
 			@RequestParam(required=true) int id,
 			@RequestParam(required=true) String content,
@@ -54,14 +52,12 @@ public class ArticleCtrl {
 	}
 	
 	@GetMapping
-	@ResponseBody
 	public ResponseContent getArticle(@RequestParam(required=true) int id) {
 		Article article = articleBusiness.getArticleById(id);
 		return ResponseContent.ok(article);
 	}
 	
 	@GetMapping("list")
-	@ResponseBody
 	public ResponseContent getArticleList(@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="5") int pageSize) {
 		PageInfo<Article> pageInfo = articleBusiness.getArticleList(pageNum, pageSize);
@@ -69,7 +65,6 @@ public class ArticleCtrl {
 	}
 	
 	@GetMapping("comment/list")
-	@ResponseBody
 	public ResponseContent getArticleCommentList(
 			@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="5") int pageSize,
@@ -79,7 +74,6 @@ public class ArticleCtrl {
 	}
 	
 	@PostMapping("comment")
-	@ResponseBody
 	public ResponseContent addArticleComment(
 			@RequestParam(required=true)int id,
 			@RequestParam(required=true) String content,

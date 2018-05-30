@@ -24,7 +24,6 @@ public class MediaCtrl {
 	MediaBusiness mediaBusiness;
 	
 	@PostMapping
-	@ResponseBody
 	public ResponseContent addMedia(
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) String mediaPath,
@@ -37,7 +36,6 @@ public class MediaCtrl {
 	}
 	
 	@PutMapping
-	@ResponseBody
 	public ResponseContent updateMedia(
 			@RequestParam(required=true) int id,
 			@RequestParam(required=true) String content,
@@ -51,7 +49,6 @@ public class MediaCtrl {
 	}
 	
 	@GetMapping
-	@ResponseBody
 	public ResponseContent getMediaById(
 			@RequestParam(required=true) int id) {
 		Media media = mediaBusiness.getMediaById(id);
@@ -59,7 +56,6 @@ public class MediaCtrl {
 	}
 	
 	@GetMapping("list")
-	@ResponseBody
 	public ResponseContent getMediaSearch(
 			@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="5") int pageSize,

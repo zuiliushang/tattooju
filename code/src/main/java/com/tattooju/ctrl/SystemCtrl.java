@@ -22,22 +22,20 @@ public class SystemCtrl {
 	StorageClient1 storageClient;
 	
 	@RequestMapping("greeting")
-	@ResponseBody
 	public String greeting() {
 		return "hello world.";
 	}
 	
 	@RequestMapping("upload")
-	@ResponseBody
 	public String upload() throws IOException, MyException {
-		String file = "E:\\test.png";
+		String file = "E:\\test.jpg";
 		byte[] bs = Files.readAllBytes(new File(file).toPath());
 		String[] result;
 		try {
-			result = storageClient.upload_file(bs, "png", null);
+			result = storageClient.upload_file(bs, "jpg", null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = storageClient.upload_file(bs, "png", null);
+			result = storageClient.upload_file(bs, "jpg", null);
 			return "aa";
 			}
 		Stream.of(result).forEach(System.out::println);

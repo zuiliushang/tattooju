@@ -19,7 +19,6 @@ public class AccountCtrl {
 	WechatBusiness wechatBusiness;
 	
 	@GetMapping("auth")
-	@ResponseBody
 	public ResponseContent wechatAuth(@RequestParam(required=true) String code) throws Exception {
 		WechatAccountDto result = wechatBusiness.bindWechat(code);
 		return ResponseContent.ok(result);

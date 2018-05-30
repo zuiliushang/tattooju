@@ -30,8 +30,7 @@ public class ReserveCtrl {
 	@Autowired
 	ReserveBusiness reserveBusiness;
 	
-	@PostMapping()
-	@ResponseBody
+	@PostMapping
 	public ResponseContent addReserve(Reserve reserve,
 			@RequestHeader(value = "token",required = true) String token) throws Exception {
 		if (reserve == null) {
@@ -44,8 +43,7 @@ public class ReserveCtrl {
 		return ResponseContent.ok(null);
 	}
 	
-	@PutMapping()
-	@ResponseBody
+	@PutMapping
 	public ResponseContent updateReserve(Reserve reserve,
 			@RequestHeader(value = "token",required = true) String token) throws Exception {
 		if (reserve == null) {
@@ -59,15 +57,13 @@ public class ReserveCtrl {
 		return ResponseContent.ok(null);
 	}
 	
-	@GetMapping()
-	@ResponseBody
+	@GetMapping
 	public ResponseContent getReserveById(@RequestParam(required=true) int id) {
 		ReserveDto reserve = reserveBusiness.getReserveById(id);
 		return ResponseContent.ok(reserve);
 	}
 	
 	@GetMapping("list")
-	@ResponseBody
 	public ResponseContent getReserveList(
 			@RequestParam(required=true) int accountId,
 			@RequestParam(defaultValue="1") int pageNum,

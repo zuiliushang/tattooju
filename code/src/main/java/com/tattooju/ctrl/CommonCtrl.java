@@ -21,7 +21,6 @@ public class CommonCtrl {
 	MediaBusiness mediaBusiness;
 	
 	@PostMapping("upload")
-	@ResponseBody
 	public ResponseContent mediaUpload(
 			@RequestParam(value = "mediaType",required=true) int mediaType
 			,@RequestParam(value = "file", required = true)MultipartFile file,
