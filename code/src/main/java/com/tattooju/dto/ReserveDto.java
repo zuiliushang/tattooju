@@ -18,7 +18,7 @@ public class ReserveDto {
 	
 	private String body;
 	
-	private Byte status;
+	private Byte status; //0)已取消 1)已预约 2)已删除 3)已完成
 	
 	private Date reserveTime;
 	

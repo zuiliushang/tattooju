@@ -128,5 +128,17 @@ public class MediaBusiness {
 		mediaExample.orderBy("createTime").desc();
 		return mediaService.selectByExample(mediaExample, pageNum, pageSize);
 	}
+
+
+	public void deleteMediaById(int id, int accountId) throws CommonException {
+		WechatAccount wechatAccount = wechatAccountService.selectByKey(accountId);
+		if (wechatAccount==null || !wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {
+			throw new CommonException(ResponseCode.FAILED.getValue(), "没有权限操作");
+		}
+		int row = mediaService.delete(id);
+		if (row < 1) {
+			throw new CommonException(ResponseCode.FAILED.getValue(),"删除出错");
+		}
+	}
 	
 }

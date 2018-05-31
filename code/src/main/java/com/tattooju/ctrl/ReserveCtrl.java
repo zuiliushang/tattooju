@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
@@ -18,8 +17,6 @@ import com.tattooju.business.ReserveBusiness;
 import com.tattooju.config.ResponseContent;
 import com.tattooju.dto.ReserveDto;
 import com.tattooju.entity.Reserve;
-import com.tattooju.exception.CommonException;
-import com.tattooju.exception.NullParamException;
 import com.tattooju.status.ReserveStatus;
 import com.tattooju.util.JwtUtil;
 
@@ -31,12 +28,19 @@ public class ReserveCtrl {
 	ReserveBusiness reserveBusiness;
 	
 	@PostMapping
-	public ResponseContent addReserve(Reserve reserve,
+	public ResponseContent addReserve(@RequestParam(required=true)String wxAccount,
+			@RequestParam(required=true) String mobile,
+			@RequestParam(required=true) String body,
+			@RequestParam(required=true) String content,
+			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
 			@RequestHeader(value = "token",required = true) String token) throws Exception {
-		if (reserve == null) {
-			throw new NullParamException("参数");
-		}
 		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		Reserve reserve = new Reserve();
+		reserve.setBody(body);
+		reserve.setContent(content);
+		reserve.setMobile(mobile);
+		reserve.setReserveTime(reserveTime);
+		reserve.setWxAccount(wxAccount);
 		reserve.setAccountId(accountId);
 		reserve.setStatus(ReserveStatus.RESERVED.value());
 		reserveBusiness.addReserve(reserve);
@@ -44,16 +48,34 @@ public class ReserveCtrl {
 	}
 	
 	@PutMapping
-	public ResponseContent updateReserve(Reserve reserve,
+	public ResponseContent updateReserve(
+			@RequestParam(required=true) int id,
+			@RequestParam(required=true)String wxAccount,
+			@RequestParam(required=true) String mobile,
+			@RequestParam(required=true) String body,
+			@RequestParam(required=true) String content,
+			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
 			@RequestHeader(value = "token",required = true) String token) throws Exception {
-		if (reserve == null) {
-			throw new NullParamException("参数");
-		}
-		if (reserve.getId() == null) {
-			throw new NullParamException("id");
-		}
+		Reserve reserve = new Reserve();
+		reserve.setId(id);
+		reserve.setBody(body);
+		reserve.setContent(content);
+		reserve.setMobile(mobile);
+		reserve.setReserveTime(reserveTime);
+		reserve.setWxAccount(wxAccount);
+		reserve.setUpdateTime(new Date());
 		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
 		reserveBusiness.updateReserve(reserve,accountId);
+		return ResponseContent.ok(null);
+	}
+	
+	@PutMapping("status")
+	public ResponseContent updateReserveStatus(
+			@RequestParam(required=true) int id,
+			@RequestParam(required=true) byte status,
+			@RequestHeader(required=true) String token) throws Exception {
+		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		reserveBusiness.updateReserveStatus(id,accountId,status);
 		return ResponseContent.ok(null);
 	}
 	
@@ -65,10 +87,11 @@ public class ReserveCtrl {
 	
 	@GetMapping("list")
 	public ResponseContent getReserveList(
-			@RequestParam(required=true) int accountId,
+			@RequestHeader(required=true) String token,
 			@RequestParam(defaultValue="1") int pageNum,
-			@RequestParam(defaultValue="10") int pageSize,
-			@DateTimeFormat(pattern = "yyyy-MM-dd") Date date) throws CommonException {
+			@RequestParam(defaultValue="5") int pageSize,
+			@DateTimeFormat(pattern = "yyyy-MM-dd") Date date) throws Exception {
+		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
 		PageInfo<ReserveDto> result = reserveBusiness.getReserveList(accountId, pageNum, pageSize, date);
 		return ResponseContent.ok(result);
 	}

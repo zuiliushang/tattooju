@@ -70,6 +70,9 @@ public class ReserveBusiness {
 
 	public ReserveDto getReserveById(int id) {
 		Reserve reserve = reserveService.selectByKey(id);
+		if (reserve == null || reserve.getStatus().equals(ReserveStatus.DELETE.value())) {
+			return null;
+		}
 		ReserveDto reserveDto = new ReserveDto();
 		reserveDto.setAccountId(reserve.getAccountId());
 		reserveDto.setBody(reserve.getBody());
@@ -124,6 +127,38 @@ public class ReserveBusiness {
 			return reserveDto;
 		}).collect(Collectors.toList());
 		return new PageInfo<>(reserveDtos);
+	}
+
+	public void updateReserveStatus(int id, Integer accountId, byte status) throws CommonException {
+		WechatAccount wechatAccount = wechatAccountService.selectByKey(accountId);
+		if (wechatAccount == null) {
+			throw new CommonException(ResponseCode.FAILED.getValue(), "用户不存在");
+		}
+		if (!wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {// 不是管理员
+			// 查询该数据的用户ID
+			Example reserveExample = new Example(Reserve.class);
+			reserveExample
+				.selectProperties("accountId")
+				.createCriteria()
+				.andEqualTo("id", id);
+			List<Reserve> res = reserveService.selectByExample(reserveExample);
+			if (!CollectionUtils.isEmpty(res)) {
+				if (!res.get(0).getId().equals(accountId)) {//普通用户不能修改别人的预约
+					throw new CommonException(ResponseCode.FAILED.getValue(), "没有权限操作");
+				}
+			}else {//找不到数据
+				throw new CommonException(ResponseCode.FAILED.getValue(), "数据出错");
+			}
+		}
+		Reserve reserve= new Reserve();
+		reserve.setId(id);
+		reserve.setStatus(status);
+		reserve.setUpdateTime(new Date());
+		int row = reserveService.updateNotNull(reserve);
+		if (row < 1) {
+			throw new CommonException(ResponseCode.FAILED.getValue(),"更新出错");
+		}
+		
 	}
 	
 }

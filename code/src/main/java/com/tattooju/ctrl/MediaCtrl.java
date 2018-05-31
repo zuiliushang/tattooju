@@ -1,13 +1,13 @@
 package com.tattooju.ctrl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
@@ -62,7 +62,15 @@ public class MediaCtrl {
 			String keyword,
 			String tag) {
 		PageInfo<Media> pageInfo = mediaBusiness.getMediaList(pageNum,pageSize,keyword,tag);
-		return null;
+		return ResponseContent.ok(pageInfo);
+	}
+	
+	@DeleteMapping
+	public ResponseContent deleteMedia(@RequestParam(required=true) int id
+			,@RequestHeader(required=true) String token) throws Exception {
+		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		mediaBusiness.deleteMediaById(id,accountId);
+		return ResponseContent.ok(null);
 	}
 	
 }

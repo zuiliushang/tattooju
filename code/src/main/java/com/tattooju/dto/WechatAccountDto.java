@@ -13,6 +13,11 @@ public class WechatAccountDto {
 	private String openId;
 	
 	/**
+	 * 角色
+	 */
+	private int role;
+	
+	/**
 	 * 微信头像
 	 */
 	private String headimgurl;
@@ -57,6 +62,14 @@ public class WechatAccountDto {
 
 	public void setHeadimgurl(String headimgurl) {
 		this.headimgurl = headimgurl;
+	}
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
 	}
 
 	public String getToken() {

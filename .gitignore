@@ -16,3 +16,6 @@ __pycache__
 *.iml
 data/
 /.metadata/
+
+**/application-dev.yml
+**/logs/**

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +22,7 @@ import com.tattooju.service.WechatAccountService;
 import com.tattooju.status.AccountRoleEnum;
 
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
 public class ArticleBusiness {
@@ -52,7 +54,7 @@ public class ArticleBusiness {
 		}
 	}
 
-	public void updateArticle(int id, String content, String coverImg, String title, byte type, int accountId) throws CommonException {
+	public void updateArticle(int id, String content, String coverImg, String title, int accountId) throws CommonException {
 		WechatAccount wechatAccount = wechatAccountService.selectByKey(accountId);
 		if (wechatAccount==null || !wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {
 			throw new CommonException(ResponseCode.FAILED.getValue(), "没有权限操作");
@@ -62,7 +64,6 @@ public class ArticleBusiness {
 		article.setContent(content);
 		article.setCoverImg(coverImg);
 		article.setTitle(title);
-		article.setType(type);
 		article.setUpdateTime(new Date());
 		int row = articleService.updateNotNull(article);
 		if (row < 1) {
@@ -74,10 +75,15 @@ public class ArticleBusiness {
 		return articleService.selectByKey(articleId);
 	}
 	
-	public PageInfo<Article> getArticleList(int pageNum,int pageSize){
-		PageHelper.startPage(pageNum, pageSize);
-		List<Article> articles = articleService.selectAll();
-		return new PageInfo<>(articles);
+	@SuppressWarnings("unchecked")
+	public PageInfo<Article> getArticleList(int pageNum,int pageSize,Byte type){
+		Example articleExample = new Example(Article.class);
+		Criteria criteria = articleExample.createCriteria();
+		if (type!=null) {
+			criteria.andEqualTo("type", type);
+		}
+		articleExample.orderBy("createTime").desc();
+		return articleService.selectByExample(articleExample,pageNum,pageSize);
 	}
 	
 	public PageInfo<ArticleCommentDto> getArticleComment(int pageNum,int pageSize,int articleId){
@@ -108,6 +114,31 @@ public class ArticleBusiness {
 		int row = articleCommentService.saveNotNull(articleComment);
 		if (row < 1) {
 			throw new CommonException(ResponseCode.FAILED.getValue(),"写入失败");
+		}
+	}
+	@Transactional(rollbackFor=CommonException.class)
+	public void deleteArticleById(int id, int accountId) throws CommonException {
+		WechatAccount wechatAccount = wechatAccountService.selectByKey(accountId);
+		if (wechatAccount==null || !wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {
+			throw new CommonException(ResponseCode.FAILED.getValue(), "没有权限操作");
+		}
+		Example commentExample = new Example(ArticleComment.class);
+		commentExample.createCriteria().andEqualTo("articleId", id);
+		articleCommentService.deleteByExample(commentExample);
+		int row = articleService.delete(id);
+		if (row < 1) {
+			throw new CommonException(ResponseCode.FAILED.getValue(),"删除失败");
+		}
+	}
+
+	public void deleteArticleCommentById(int id, int accountId) throws CommonException {
+		WechatAccount wechatAccount = wechatAccountService.selectByKey(accountId);
+		if (wechatAccount==null || !wechatAccount.getRole().equals(AccountRoleEnum.ADMIN.value())) {
+			throw new CommonException(ResponseCode.FAILED.getValue(), "没有权限操作");
+		}
+		int row = articleCommentService.delete(id);
+		if (row < 1) {
+			throw new CommonException(ResponseCode.FAILED.getValue(),"删除失败");
 		}
 	}
 	

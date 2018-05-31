@@ -89,6 +89,7 @@ public class WechatBusiness {
 			String key = Constant.PREFIX_ACCOUNT_TOKEN + id;
 			stringRedisTemplate.opsForValue().set(key, token, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
 			dto.setToken(token);
+			dto.setRole(wechatAccount.getRole());
 		}else {// 不为空
 			WechatAccount account = wechatAccounts.get(0);
 			account.setHeadImgUrl(dto.getHeadimgurl());
@@ -97,6 +98,7 @@ public class WechatBusiness {
 			wechatAccountService.updateNotNull(account);//获取更新
 			String key = Constant.PREFIX_ACCOUNT_TOKEN + account.getId();
 			String cachedToken = stringRedisTemplate.opsForValue().get(key);
+			dto.setRole(account.getRole());
 			if (StringUtils.isEmpty(cachedToken)) {
 				stringRedisTemplate.opsForValue().set(key, cachedToken, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
 				dto.setToken(cachedToken);

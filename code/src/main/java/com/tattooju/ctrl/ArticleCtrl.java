@@ -1,6 +1,7 @@
 package com.tattooju.ctrl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,11 +44,10 @@ public class ArticleCtrl {
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) String coverImg,
 			@RequestParam(required=true) String title,
-			@RequestParam(required=true) byte type,
 			@RequestHeader(required=true) String token
 			) throws Exception {
 		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
-		articleBusiness.updateArticle(id,content, coverImg, title, type,accountId);
+		articleBusiness.updateArticle(id,content, coverImg, title,accountId);
 		return ResponseContent.ok(null);
 	}
 	
@@ -57,10 +57,18 @@ public class ArticleCtrl {
 		return ResponseContent.ok(article);
 	}
 	
+	@DeleteMapping
+	public ResponseContent deleteArticle(@RequestParam(required=true) int id,@RequestHeader(required=true) String token) throws Exception {
+		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		articleBusiness.deleteArticleById(id,accountId);
+		return ResponseContent.ok(null);
+	}
+	
 	@GetMapping("list")
 	public ResponseContent getArticleList(@RequestParam(defaultValue="1") int pageNum,
-			@RequestParam(defaultValue="5") int pageSize) {
-		PageInfo<Article> pageInfo = articleBusiness.getArticleList(pageNum, pageSize);
+			@RequestParam(defaultValue="5") int pageSize,
+			@RequestParam() Byte type) {
+		PageInfo<Article> pageInfo = articleBusiness.getArticleList(pageNum, pageSize,type);
 		return ResponseContent.ok(pageInfo);
 	}
 	
@@ -80,6 +88,14 @@ public class ArticleCtrl {
 			@RequestHeader(value="token",required=true) String token) throws Exception {
 		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
 		articleBusiness.writeComment(id, accountId, content);
+		return ResponseContent.ok(null);
+	}
+	
+	@DeleteMapping("comment")
+	public ResponseContent deleteArticleComment(@RequestParam(required=true) int id,
+			@RequestHeader(required =true) String token) throws Exception {
+		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		articleBusiness.deleteArticleCommentById(id, accountId);
 		return ResponseContent.ok(null);
 	}
 	

@@ -2,9 +2,9 @@ package com.tattooju.status;
 
 public enum MediaTypeEnum {
 
-	VIDEO((byte)1),
+	VIDEO((byte)2),
 	
-	OTHER((byte)2);
+	OTHER((byte)1);
 	
 	private byte value;
 	
