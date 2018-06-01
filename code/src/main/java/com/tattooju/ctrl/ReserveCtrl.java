@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.tattooju.business.ReserveBusiness;
+import com.tattooju.config.ResponseCode;
 import com.tattooju.config.ResponseContent;
 import com.tattooju.dto.ReserveDto;
 import com.tattooju.entity.Reserve;
+import com.tattooju.exception.CommonException;
 import com.tattooju.status.ReserveStatus;
 import com.tattooju.util.JwtUtil;
 
@@ -33,7 +36,10 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String body,
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
-			@RequestHeader(value = "token",required = true) String token) throws Exception {
+			String token) throws Exception {
+		if (StringUtils.isEmpty(token)) {
+			throw new CommonException(ResponseCode.TOKEN_INVALID);
+		}
 		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		Reserve reserve = new Reserve();
 		reserve.setBody(body);
@@ -55,7 +61,10 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String body,
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
-			@RequestHeader(value = "token",required = true) String token) throws Exception {
+			 String token) throws Exception {
+		if (StringUtils.isEmpty(token)) {
+			throw new CommonException(ResponseCode.TOKEN_INVALID);
+		}
 		Reserve reserve = new Reserve();
 		reserve.setId(id);
 		reserve.setBody(body);
@@ -73,7 +82,10 @@ public class ReserveCtrl {
 	public ResponseContent updateReserveStatus(
 			@RequestParam(required=true) int id,
 			@RequestParam(required=true) byte status,
-			@RequestHeader(required=true) String token) throws Exception {
+			String token) throws Exception {
+		if (StringUtils.isEmpty(token)) {
+			throw new CommonException(ResponseCode.TOKEN_INVALID);
+		}
 		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		reserveBusiness.updateReserveStatus(id,accountId,status);
 		return ResponseContent.ok(null);
@@ -87,10 +99,13 @@ public class ReserveCtrl {
 	
 	@GetMapping("list")
 	public ResponseContent getReserveList(
-			@RequestHeader(required=true) String token,
+			String token,
 			@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="5") int pageSize,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") Date date) throws Exception {
+		if (StringUtils.isEmpty(token)) {
+			throw new CommonException(ResponseCode.TOKEN_INVALID);
+		}
 		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		PageInfo<ReserveDto> result = reserveBusiness.getReserveList(accountId, pageNum, pageSize, date);
 		return ResponseContent.ok(result);

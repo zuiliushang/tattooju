@@ -3,7 +3,7 @@ package com.tattooju.config;
 public enum ResponseCode {
 	OK(1000,"ok"),
 	TEST(1,"test"),
-	TOKEN_INVALID(1001,"访问令牌已失效,请重新登录"),
+	TOKEN_INVALID(1001,"访问令牌失效,请登录"),
 	FAILED(500,"请求失败")
 	;
 	

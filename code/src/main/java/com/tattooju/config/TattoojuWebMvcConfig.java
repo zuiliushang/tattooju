@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.tattooju.ctrl.interceptor.TokenInterceptor;
 import com.tattooju.util.RequestUtil;
 
+@Configuration
 public class TattoojuWebMvcConfig extends WebMvcConfigurerAdapter{
 private Logger logger=LoggerFactory.getLogger(TattoojuWebMvcConfig.class);
 	
@@ -45,8 +47,8 @@ private Logger logger=LoggerFactory.getLogger(TattoojuWebMvcConfig.class);
 	      }).addPathPatterns("/**").excludePathPatterns("/favicon.ico");
 	      
 	      //	      增加校验访问令牌的拦截器
-	      registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**")
-	      .excludePathPatterns(excludePathPatterns);
+	     /* registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**")
+	      .excludePathPatterns(excludePathPatterns);*/
 	  }
 	
 	/**

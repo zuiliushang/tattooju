@@ -116,7 +116,7 @@ public class MediaBusiness {
 
 
 	@SuppressWarnings("unchecked")
-	public PageInfo<Media> getMediaList(int pageNum, int pageSize, String keyword, String tag) {
+	public PageInfo<Media> getMediaList(int pageNum, int pageSize, String keyword, String tag, Byte type) {
 		Example mediaExample = new Example(Media.class);
 		Criteria criteria = mediaExample.createCriteria();
 		if (!StringUtils.isEmpty(keyword)) {
@@ -124,6 +124,9 @@ public class MediaBusiness {
 		}
 		if (!StringUtils.isEmpty(tag)) {
 			criteria.andLike("tagContent", "%,"+tag+",%");
+		}
+		if (type!=null) {
+			criteria.andEqualTo("type", type);
 		}
 		mediaExample.orderBy("createTime").desc();
 		return mediaService.selectByExample(mediaExample, pageNum, pageSize);
