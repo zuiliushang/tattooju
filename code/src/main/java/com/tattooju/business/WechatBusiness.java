@@ -100,6 +100,7 @@ public class WechatBusiness {
 			String cachedToken = stringRedisTemplate.opsForValue().get(key);
 			dto.setRole(account.getRole());
 			if (StringUtils.isEmpty(cachedToken)) {
+				cachedToken = JwtUtil.createJWT(account, JwtUtil.JWT_SECRET, 0);
 				stringRedisTemplate.opsForValue().set(key, cachedToken, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
 				dto.setToken(cachedToken);
 			}else {
@@ -107,6 +108,7 @@ public class WechatBusiness {
 				dto.setToken(cachedToken);
 			}
 		}
+		System.out.println(dto.getToken());
 		return dto;
 	}
 	
