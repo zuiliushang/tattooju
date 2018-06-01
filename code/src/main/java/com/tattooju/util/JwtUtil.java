@@ -163,12 +163,13 @@ public class JwtUtil {
 	
 	
 	 public static void main(String[] args) throws Exception {
-		WechatAccount u=new WechatAccount();
+		/*WechatAccount u=new WechatAccount();
 		u.setId(1);
 		String token=JwtUtil.createJWT(u, JwtUtil.JWT_SECRET, 0);
 		 System.out.println(JwtUtil.createJWT(u, JwtUtil.JWT_SECRET, 0));
 		Claims c= JwtUtil.parseJWT(JwtUtil.JWT_SECRET, token);
-		 System.out.println(c.get(JwtUtil.JWT_CLAIM_ACCOUNT_ID));
+		 System.out.println(c.get(JwtUtil.JWT_CLAIM_ACCOUNT_ID));*/
+		 System.out.println(JwtUtil.getUserId(JwtUtil.JWT_SECRET, "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1Mjc4MTg3MTIsImlkIjo0LCJ0YXR0b29qdSI6Im5MREhveSIsInN1YiI6IjEifQ.m4guApG1hX2b2DNvQ-eUnys9KwNbB9AfQ2vw___v2gs"));
 	}
 	
 }

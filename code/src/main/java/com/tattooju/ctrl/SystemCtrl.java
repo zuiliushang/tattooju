@@ -14,12 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tattooju.entity.WechatAccount;
+import com.tattooju.entity.WechatAccountMapper;
+import com.tattooju.util.JwtUtil;
+
 @RequestMapping("/sys/")
 @RestController
 public class SystemCtrl {
 
 	@Autowired
 	StorageClient1 storageClient;
+	
+	@Autowired
+	WechatAccountMapper wechatAccountMapper;
 	
 	@RequestMapping("greeting")
 	public String greeting() {
@@ -42,4 +49,9 @@ public class SystemCtrl {
 		return result[0];
 	}
 	
+	/*@RequestMapping("token")
+	public String getToken(int id) {
+		WechatAccount wechatAccount = wechatAccountMapper.selectByPrimaryKey(id);
+		return JwtUtil.createJWT(wechatAccount, JwtUtil.JWT_SECRET, 0);
+	}*/
 }
