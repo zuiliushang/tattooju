@@ -25,7 +25,7 @@ public class CommonCtrl {
 			@RequestParam(value = "mediaType",required=true) int mediaType
 			,@RequestParam(value = "file", required = true)MultipartFile file,
 			@RequestHeader(value = "token", required = true)String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		String result = mediaBusiness.mediaUpload(file.getBytes(), file.getOriginalFilename(), mediaType,accountId);
 		return ResponseContent.ok(result);
 	}

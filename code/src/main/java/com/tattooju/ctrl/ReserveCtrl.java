@@ -34,7 +34,7 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
 			@RequestHeader(value = "token",required = true) String token) throws Exception {
-		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		Reserve reserve = new Reserve();
 		reserve.setBody(body);
 		reserve.setContent(content);
@@ -64,7 +64,7 @@ public class ReserveCtrl {
 		reserve.setReserveTime(reserveTime);
 		reserve.setWxAccount(wxAccount);
 		reserve.setUpdateTime(new Date());
-		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		reserveBusiness.updateReserve(reserve,accountId);
 		return ResponseContent.ok(null);
 	}
@@ -74,7 +74,7 @@ public class ReserveCtrl {
 			@RequestParam(required=true) int id,
 			@RequestParam(required=true) byte status,
 			@RequestHeader(required=true) String token) throws Exception {
-		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		reserveBusiness.updateReserveStatus(id,accountId,status);
 		return ResponseContent.ok(null);
 	}
@@ -91,7 +91,7 @@ public class ReserveCtrl {
 			@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="5") int pageSize,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") Date date) throws Exception {
-		Integer accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		PageInfo<ReserveDto> result = reserveBusiness.getReserveList(accountId, pageNum, pageSize, date);
 		return ResponseContent.ok(result);
 	}

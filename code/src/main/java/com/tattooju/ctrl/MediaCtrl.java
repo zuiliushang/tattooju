@@ -30,7 +30,7 @@ public class MediaCtrl {
 			@RequestParam(required=true) String tagContent,
 			@RequestParam(required=true) byte type,
 			@RequestHeader("token") String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		mediaBusiness.addMedia(content, mediaPath, tagContent, type, accountId);
 		return ResponseContent.ok(null);
 	}
@@ -43,7 +43,7 @@ public class MediaCtrl {
 			@RequestParam(required=true) String tagContent,
 			@RequestParam(required=true) byte type,
 			@RequestHeader("token") String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		mediaBusiness.updateMedia(id,content, mediaPath, tagContent, type, accountId);
 		return ResponseContent.ok(null);
 	}
@@ -68,7 +68,7 @@ public class MediaCtrl {
 	@DeleteMapping
 	public ResponseContent deleteMedia(@RequestParam(required=true) int id
 			,@RequestHeader(required=true) String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		mediaBusiness.deleteMediaById(id,accountId);
 		return ResponseContent.ok(null);
 	}

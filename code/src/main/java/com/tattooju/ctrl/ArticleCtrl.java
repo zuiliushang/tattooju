@@ -33,7 +33,7 @@ public class ArticleCtrl {
 			@RequestParam(required=true) byte type,
 			@RequestHeader(required=true) String token
 			) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		articleBusiness.addArticle(content, coverImg, title, type,accountId);
 		return ResponseContent.ok(null);
 	}
@@ -46,7 +46,7 @@ public class ArticleCtrl {
 			@RequestParam(required=true) String title,
 			@RequestHeader(required=true) String token
 			) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		articleBusiness.updateArticle(id,content, coverImg, title,accountId);
 		return ResponseContent.ok(null);
 	}
@@ -59,7 +59,7 @@ public class ArticleCtrl {
 	
 	@DeleteMapping
 	public ResponseContent deleteArticle(@RequestParam(required=true) int id,@RequestHeader(required=true) String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		articleBusiness.deleteArticleById(id,accountId);
 		return ResponseContent.ok(null);
 	}
@@ -86,7 +86,7 @@ public class ArticleCtrl {
 			@RequestParam(required=true)int id,
 			@RequestParam(required=true) String content,
 			@RequestHeader(value="token",required=true) String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		articleBusiness.writeComment(id, accountId, content);
 		return ResponseContent.ok(null);
 	}
@@ -94,7 +94,7 @@ public class ArticleCtrl {
 	@DeleteMapping("comment")
 	public ResponseContent deleteArticleComment(@RequestParam(required=true) int id,
 			@RequestHeader(required =true) String token) throws Exception {
-		int accountId = JwtUtil.getUserId(token, JwtUtil.JWT_SECRET);
+		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		articleBusiness.deleteArticleCommentById(id, accountId);
 		return ResponseContent.ok(null);
 	}

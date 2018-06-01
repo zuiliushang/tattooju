@@ -59,6 +59,7 @@ public class AccountTest {
 			String key = Constant.PREFIX_ACCOUNT_TOKEN + id;
 			stringRedisTemplate.opsForValue().set(key, token, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
 			System.out.println(222);
+			System.out.println(token);
 		}else {// 不为空
 			WechatAccount account = wechatAccounts.get(0);
 			wechatAccountService.updateNotNull(account);//获取更新
@@ -71,6 +72,7 @@ public class AccountTest {
 				stringRedisTemplate.expire(key, properties.getTokenVerifyTTL(), TimeUnit.MINUTES);
 			}
 			System.out.println(111);
+			System.out.println(cachedToken);
 		}
 	}
 	
