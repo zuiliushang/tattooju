@@ -1,6 +1,5 @@
 package com.tattooju.ctrl;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
-import com.tattooju.business.MediaBusiness;
+import com.tattooju.business.DraftBusiness;
 import com.tattooju.config.ResponseCode;
 import com.tattooju.config.ResponseContent;
-import com.tattooju.dto.ArticleDto;
-import com.tattooju.entity.Media;
+import com.tattooju.entity.Draft;
 import com.tattooju.exception.CommonException;
 import com.tattooju.util.JwtUtil;
 
 @RestController
-@RequestMapping("media")
-public class MediaCtrl {
+@RequestMapping("draft")
+public class DraftCtrl {
 	
 	@Autowired
-	MediaBusiness mediaBusiness;
+	DraftBusiness draftBusiness;
 	
 	@PostMapping
 	public ResponseContent addMedia(
@@ -41,7 +39,7 @@ public class MediaCtrl {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
 		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
-		mediaBusiness.addMedia(content, mediaPath, tagContent, type, accountId);
+		draftBusiness.addMedia(content, mediaPath, tagContent, type, accountId);
 		return ResponseContent.ok(null);
 	}
 	
@@ -57,15 +55,15 @@ public class MediaCtrl {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
 		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
-		mediaBusiness.updateMedia(id,content, mediaPath, tagContent, type, accountId);
+		draftBusiness.updateMedia(id,content, mediaPath, tagContent, type, accountId);
 		return ResponseContent.ok(null);
 	}
 	
 	@GetMapping
 	public ResponseContent getMediaById(
 			@RequestParam(required=true) int id) {
-		Media media = mediaBusiness.getMediaById(id);
-		return ResponseContent.ok(media);
+		Draft draft = draftBusiness.getMediaById(id);
+		return ResponseContent.ok(draft);
 	}
 	
 	@GetMapping("list")
@@ -75,7 +73,7 @@ public class MediaCtrl {
 			String keyword,
 			String tag,
 			Byte type) {
-		PageInfo<Media> pageInfo = mediaBusiness.getMediaList(pageNum,pageSize,keyword,tag,type);
+		PageInfo<Draft> pageInfo = draftBusiness.getMediaList(pageNum,pageSize,keyword,tag,type);
 		return ResponseContent.ok(pageInfo);
 	}
 	
@@ -86,13 +84,13 @@ public class MediaCtrl {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
 		int accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
-		mediaBusiness.deleteMediaById(id,accountId);
+		draftBusiness.deleteMediaById(id,accountId);
 		return ResponseContent.ok(null);
 	}
 	
 	@GetMapping("tag/list")
 	public ResponseContent getTags() {
-		List<String> tags = mediaBusiness.getTags();
+		List<String> tags = draftBusiness.getTags();
 		return ResponseContent.ok(tags);
 	}
 	

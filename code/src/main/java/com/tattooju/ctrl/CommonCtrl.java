@@ -27,7 +27,7 @@ public class CommonCtrl {
 	public ResponseContent mediaUpload(
 			@RequestParam(value = "mediaType",required=true) int mediaType
 			,@RequestParam(value = "file", required = true)MultipartFile file,
-			String token) throws Exception {
+			@RequestHeader() String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}

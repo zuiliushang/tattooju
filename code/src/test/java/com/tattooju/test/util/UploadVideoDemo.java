@@ -26,13 +26,13 @@ import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse.VideoMeta;
  */
 public class UploadVideoDemo {
 	// 账号AK信息请填写(必选)
-	private static final String accessKeyId = "";
+	private static final String accessKeyId = "LTAIKGcm5gyqIHSZ";
 	// 账号AK信息请填写(必选)
-	private static final String accessKeySecret = "";
+	private static final String accessKeySecret = "84vhafSFFbSR2odn0iuHbZ5UyDqpLl";
 
 	public static void main(String[] args) {
-		getVideoPlay("2e43d795e06b4a669c9a99c52a0e7385");//187ff1b25aab4813aba05135426dc6cf
-		
+		//getVideoPlay("2e43d795e06b4a669c9a99c52a0e7385");//187ff1b25aab4813aba05135426dc6cf
+		testCreate();
 	}
 
 	private static void getVideoPlay( String videoId) {
@@ -88,18 +88,9 @@ public class UploadVideoDemo {
 		DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile("cn-shanghai", accessKeyId, accessKeySecret));
 		CreateUploadVideoRequest request = new CreateUploadVideoRequest();
 	    CreateUploadVideoResponse response = null;
-	    byte[] bs;
-		try {
-			bs = Files.readAllBytes(new File("E:\\C360VID_20180529_222621.mp4").toPath());
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			throw new RuntimeException();
-		}
 		try {
 		      /*必选，视频源文件名称（必须带后缀, 支持 "3GP","AVI","FLV","MP4","M3U8","MPG","ASF","WMV","MKV","MOV","TS","WebM","MPEG","RM","RMVB","DAT","ASX","WVX","MPE","MPA","F4V","MTS","VOB","GIF"）*/
 		      request.setFileName("C360VID_20180529_222621.mp4");//上传的视频文件名称
-		      //必选，视频源文件字节数
-		      request.setFileSize(Long.valueOf(bs.length));//;上传视频的大小
 		      //必选，视频标题
 		      request.setTitle("测试测试"); //上传视频的标题
 		      response = client.getAcsResponse(request);

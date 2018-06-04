@@ -9,6 +9,10 @@ spring:
     serialization: 
       indent-output: true
     time-zone: GMT+8
+  http:
+    multipart:
+      maxFileSize: 10Mb  
+      maxRequestSize: 10Mb  
 mapper: 
   identity: MYSQL
   mappers: tk.mybatis.mapper.common.Mapper

@@ -36,7 +36,7 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String body,
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
-			String token) throws Exception {
+			@RequestHeader()String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
@@ -61,7 +61,7 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String body,
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
-			 String token) throws Exception {
+			@RequestHeader()String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
@@ -82,7 +82,7 @@ public class ReserveCtrl {
 	public ResponseContent updateReserveStatus(
 			@RequestParam(required=true) int id,
 			@RequestParam(required=true) byte status,
-			String token) throws Exception {
+			@RequestHeader()String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
@@ -99,7 +99,7 @@ public class ReserveCtrl {
 	
 	@GetMapping("list")
 	public ResponseContent getReserveList(
-			String token,
+			@RequestHeader()String token,
 			@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="5") int pageSize,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") Date date) throws Exception {

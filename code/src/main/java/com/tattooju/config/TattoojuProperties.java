@@ -18,6 +18,28 @@ public class TattoojuProperties {
 	@Value("${token.verify.ttl}")
 	private Long tokenVerifyTTL;
 	
+	@Value("${alibaba.video.accessKeyId}")
+	private String accessKeyId;
+	
+	@Value("${alibaba.video.accessKeySecret}")
+	private String accessKeySecret;
+	
+	public String getAccessKeyId() {
+		return accessKeyId;
+	}
+
+	public void setAccessKeyId(String accessKeyId) {
+		this.accessKeyId = accessKeyId;
+	}
+
+	public String getAccessKeySecret() {
+		return accessKeySecret;
+	}
+
+	public void setAccessKeySecret(String accessKeySecret) {
+		this.accessKeySecret = accessKeySecret;
+	}
+
 	public Long getTokenVerifyTTL() {
 		return tokenVerifyTTL;
 	}

@@ -34,7 +34,7 @@ public class ArticleCtrl {
 			@RequestParam(required=true) String coverImg,
 			@RequestParam(required=true) String title,
 			@RequestParam(required=true) byte type,
-			String token
+			@RequestHeader() String token
 			) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
@@ -50,7 +50,7 @@ public class ArticleCtrl {
 			@RequestParam(required=true) String content,
 			@RequestParam(required=true) String coverImg,
 			@RequestParam(required=true) String title,
-			 String token
+			@RequestHeader() String token
 			) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
@@ -97,7 +97,7 @@ public class ArticleCtrl {
 	public ResponseContent addArticleComment(
 			@RequestParam(required=true)int id,
 			@RequestParam(required=true) String content,
-			 String token) throws Exception {
+			@RequestHeader() String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
@@ -108,7 +108,7 @@ public class ArticleCtrl {
 	
 	@DeleteMapping("comment")
 	public ResponseContent deleteArticleComment(@RequestParam(required=true) int id,
-			String token) throws Exception {
+			@RequestHeader() String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
 			throw new CommonException(ResponseCode.TOKEN_INVALID);
 		}
