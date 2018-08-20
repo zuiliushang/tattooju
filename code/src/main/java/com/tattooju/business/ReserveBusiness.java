@@ -1,5 +1,6 @@
 package com.tattooju.business;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.tattooju.config.Constant;
+import com.tattooju.config.RedisLock;
 import com.tattooju.config.ResponseCode;
 import com.tattooju.dto.ReserveDto;
 import com.tattooju.entity.Reserve;
@@ -34,9 +37,40 @@ public class ReserveBusiness {
 	WechatAccountService wechatAccountService;
 	
 	public void addReserve(Reserve reserve) throws CommonException {
-		int row = reserveService.saveNotNull(reserve);
-		if (row < 1) {
-			throw new CommonException(ResponseCode.FAILED);
+		Date date = reserve.getReserveTime();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int hour = cal.get(Calendar.HOUR);
+		if (hour < 12) {
+			hour = 10;
+		}else {
+			hour = 15;
+		}
+		cal.set(Calendar.HOUR, hour);
+		date = cal.getTime();
+		long reserveTime = date.getTime();//预约时间 这个时间是资源
+		long expireTime = System.currentTimeMillis()+5000;// 5秒锁超时
+		boolean lockSwi = true;
+		String key = Constant.PREFIX_RESERVE + reserveTime;
+		while (lockSwi) {
+			if (RedisLock.lock(key, String.valueOf(expireTime))) {
+				try {
+					Example reservExample = new Example(Reserve.class);
+					reservExample.createCriteria().andEqualTo("status", ReserveStatus.RESERVED.value())
+							.andEqualTo("reserveTime", date);
+					List<Reserve> reserves = reserveService.selectByExample(reservExample);
+					if (!CollectionUtils.isEmpty(reserves)) {
+						throw new CommonException(ResponseCode.FAILED.getValue(), "该时间已被预约");
+					}
+					int row = reserveService.saveNotNull(reserve);
+					if (row < 1) {
+						throw new CommonException(ResponseCode.FAILED);
+					} 
+				} finally {
+					RedisLock.unlock(key, String.valueOf(expireTime));
+					lockSwi = false;
+				}
+			}
 		}
 	}
 	
@@ -62,9 +96,41 @@ public class ReserveBusiness {
 				throw new CommonException(ResponseCode.FAILED.getValue(), "数据出错");
 			}
 		}
-		int row = reserveService.updateNotNull(reserve);
-		if (row < 1) {
-			throw new CommonException(ResponseCode.FAILED.getValue(),"更新出错");
+		//开始更新
+		Date date = reserve.getReserveTime();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int hour = cal.get(Calendar.HOUR);
+		if (hour < 12) {
+			hour = 10;
+		}else {
+			hour = 15;
+		}
+		cal.set(Calendar.HOUR, hour);
+		date = cal.getTime();
+		long reserveTime = date.getTime();//预约时间 这个时间是资源
+		long expireTime = System.currentTimeMillis()+5000;// 5秒锁超时
+		boolean lockSwi = true;
+		String key = Constant.PREFIX_RESERVE + reserveTime;	
+		while (lockSwi) {
+			if (RedisLock.lock(key, String.valueOf(expireTime))) {
+				try {
+					Example reservExample = new Example(Reserve.class);
+					reservExample.createCriteria().andEqualTo("status", ReserveStatus.RESERVED.value())
+							.andEqualTo("reserveTime", date);
+					List<Reserve> reserves = reserveService.selectByExample(reservExample);
+					if (!CollectionUtils.isEmpty(reserves)) {
+						throw new CommonException(ResponseCode.FAILED.getValue(), "该时间已被预约");
+					}
+					int row = reserveService.updateNotNull(reserve);
+					if (row < 1) {
+						throw new CommonException(ResponseCode.FAILED.getValue(),"更新出错");
+					}
+				} finally {
+					RedisLock.unlock(key, String.valueOf(expireTime));
+					lockSwi = false;
+				}
+			}
 		}
 	}
 
