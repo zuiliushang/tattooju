@@ -227,4 +227,16 @@ public class ReserveBusiness {
 		
 	}
 	
+	public List<Date> getReserveDate(Date startTime,Date endTime){
+		Example reserveExample = new Example(Reserve.class);
+		reserveExample
+			.createCriteria()
+			.andEqualTo("status", ReserveStatus.RESERVED.value())
+			.andGreaterThanOrEqualTo("reserveTime", startTime)
+			.andLessThanOrEqualTo("reserveTime", endTime);
+		reserveExample.orderBy("reserveTime").asc();
+		List<Reserve> reserves = reserveService.selectByExample(reserveExample);
+		return reserves.stream().map(t->(t.getReserveTime())).collect(Collectors.toList());
+	}
+	
 }

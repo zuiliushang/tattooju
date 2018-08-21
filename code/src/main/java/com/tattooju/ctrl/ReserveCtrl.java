@@ -1,6 +1,7 @@
 package com.tattooju.ctrl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -109,6 +110,14 @@ public class ReserveCtrl {
 		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		PageInfo<ReserveDto> result = reserveBusiness.getReserveList(accountId, pageNum, pageSize, date);
 		return ResponseContent.ok(result);
+	}
+	
+	@GetMapping("date")
+	public ResponseContent getReserveDate(
+			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date startTime,
+			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date endTime) {
+		List<Date> dates = reserveBusiness.getReserveDate(startTime, endTime);
+		return ResponseContent.ok(dates);
 	}
 	
 }

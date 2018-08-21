@@ -129,7 +129,7 @@ public class MediaBusiness {
 		if (!StringUtils.isEmpty(tag)) {
 			String[] tags = tag.split(",");
 			for (int i = 0; i < tags.length; i++) {
-				criteria.orLike("tagContent", "%,"+tags[i]+",%");
+				criteria.andLike("tagContent", "%,"+tags[i]+",%");
 			}
 		}
 		if (type!=null) {
