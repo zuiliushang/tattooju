@@ -111,13 +111,12 @@ public class ReserveCtrl {
 		PageInfo<ReserveDto> result = reserveBusiness.getReserveList(accountId, pageNum, pageSize, date);
 		return ResponseContent.ok(result);
 	}
-	
 	@GetMapping("date")
-	public ResponseContent getReserveDate(
-			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date startTime,
+	public ResponseContent getReserveDate(@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date startTime,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date endTime) {
-		List<Date> dates = reserveBusiness.getReserveDate(startTime, endTime);
-		return ResponseContent.ok(dates);
+		List<Date> reserveDates = reserveBusiness.getReserveDateList(startTime, endTime);
+		return ResponseContent.ok(reserveDates);
 	}
+	
 	
 }

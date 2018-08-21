@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+</style>
+<script src="jquery-3.3.1.min.js" type="application/javascript"></script>
+<script type="application/javascript">
+    String.prototype.replaceAll = function(s1,s2){
+        return this.replace(new RegExp(s1,"gm"),s2);
+    }
+    function doUploadForm() {
+        var formData = new FormData($( "#uploadForm" )[0]);
+        $.ajax({
+            url: '/cms/upload' ,  /*这是处理文件上传的servlet*/
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var imgPath = data.data;
+                $("#imgPath").html(imgPath);/*这是预览图片用的，自己在文件上传表单外添加*/
+            },
+            error: function (returndata) {
+                alert(returndata);
+            }
+        });
+    }
+    function addText(text){
+        var valText = $("#textAreaTag").val();
+        valText = valText.replaceAll("\'","“");
+        console.log(valText);
+        var ulNode = $("#liList");
+        if (text === 1){
+            var addText = "<li>{'text':'"+valText+"'}</li>";
+            ulNode.append(addText)
+        }
+        if (text === 2){
+            var addText = "<li>{'img':'"+valText+"'}</li>";
+            ulNode.append(addText)
+        }
+        if (text === 3){
+            var addText = "<li>{'video':'"+valText+"'}</li>";
+            ulNode.append(addText)
+        }
+    }
+    function  uploadMedia() {
+        var addText = "[";
+        var list = $("#liList").find('li');
+        for (var i = 0;i<list.length;i++){
+            if ( i == list.length-1){
+                addText = addText + list[i].innerText;
+            }else
+                addText = addText + list[i].innerText + ",";
+
+        }
+        addText = addText + "]";
+        //console.log(addText);
+        var selectedOp = $("#selectNode option:selected");
+        var coverImg = $("#coverImg").val();
+        var title = $("#title").val();
+        var tagContent = $("#tagContent").val();
+       // console.log(coverImg);
+        var type = selectedOp.val();
+        $.ajax({
+            url: '/cms/add' ,  /*这是处理文件上传的servlet*/
+            type: 'POST',
+            data: {
+                type: type,
+                coverImg: coverImg,
+                title: title,
+                tagContent: tagContent,
+                body: addText
+            },
+            success: function (data) {
+               
+                    alert("操作成功");
+                    window.location.reload();
+               
+            },
+            error: function (returndata) {
+                alert(returndata);
+            }
+        });
+    }
+</script>
+<body>
+<p>上传文件获取路径</p>
+<form id="uploadForm">
+<input type="file"  name="file"/>
+<input type="button" onclick="doUploadForm()" value="上传图片">
+</form>
+<hr>
+<label>
+    请输入封面地址:
+<input type="text" id="coverImg">
+</label>
+<p id="imgPath"></p>
+<br>
+<label>
+    请输入标题(没有标题可以不填):
+    <input type="text" id="title">
+</label>
+<br>
+<label>
+    请输入标签(没有标签可以不填):
+    <input type="text" id="tagContent">
+</label>
+<br>
+<label>
+    选择保存的类型
+    <select id="selectNode">
+        <option value="1">文章</option>
+        <option value="2">活动</option>
+        <option value="3">纹身作品图片</option>
+        <option value="4">纹身作品视频</option>
+        <option value="5">手稿图片</option>
+        <option value="6">手稿视频</option>
+    </select>
+</label>
+<br>
+<textarea id="textAreaTag"></textarea>
+<input type="button" onclick="addText(1)" value="添加段落">
+<input type="button"onclick="addText(2)" value="添加图片路径">
+<input type="button" onclick="addText(3)" value="添加视频路径">
+<hr>
+<input type="button" onclick="uploadMedia()" value="确定添加">
+<ul id="liList">
+</ul>
+</body>
+</html>

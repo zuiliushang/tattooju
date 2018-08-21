@@ -227,8 +227,9 @@ public class ReserveBusiness {
 		
 	}
 	
-	public List<Date> getReserveDate(Date startTime,Date endTime){
+	public List<Date> getReserveDateList(Date startTime,Date endTime){
 		Example reserveExample = new Example(Reserve.class);
+		endTime = DateUtil.addHour(endTime, 24);
 		reserveExample
 			.createCriteria()
 			.andEqualTo("status", ReserveStatus.RESERVED.value())

@@ -91,6 +91,7 @@ public class ArticleBusiness {
 		Example example = new Example(ArticleComment.class);
 		example.orderBy("createTime").desc();
 		List<ArticleComment> articleComments = articleCommentService.selectByExample(example);
+		PageInfo resuls = new PageInfo<>(articleComments);
 		List<ArticleCommentDto> dtos = articleComments.stream().map(comment->{
 			ArticleCommentDto articleCommentDto = new ArticleCommentDto();
 			int accountId = comment.getAccountId();
@@ -102,7 +103,8 @@ public class ArticleBusiness {
 			articleCommentDto.setNickName(wechatAccount.getNickname());
 			return articleCommentDto;
 		}).collect(Collectors.toList());
-		return new PageInfo<>(dtos);
+		resuls.setList(dtos);
+		return resuls;
 	}
 	
 	public void writeComment(int articleId,int accountId,String content) throws CommonException {
