@@ -99,9 +99,17 @@ public class DraftBusiness {
 		}
 		if (!StringUtils.isEmpty(tag)) {
 			String[] tags = tag.split(",");
+			StringBuffer sb = new StringBuffer();
+			sb.append(" ( ");
 			for (int i = 0; i < tags.length; i++) {
-				criteria.andLike("tagContent", "%,"+tags[i]+",%");
+				if (i==0) {
+					sb.append("tag_content like '%,"+tags[i].trim()+",%'");
+				}else {
+					sb.append(" or tag_content like '%,"+tags[i].trim()+",%'");
+				}
 			}
+			sb.append(" ) ");
+			criteria.andCondition(sb.toString());
 		}
 		if (type!=null) {
 			criteria.andEqualTo("type", type);
