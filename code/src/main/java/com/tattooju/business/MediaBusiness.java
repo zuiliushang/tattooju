@@ -143,6 +143,7 @@ public class MediaBusiness {
 		if (type!=null) {
 			criteria.andEqualTo("type", type);
 		}
+		mediaExample.orderBy("rank").desc();
 		mediaExample.orderBy("createTime").desc();
 		return mediaService.selectByExample(mediaExample, pageNum, pageSize);
 	}

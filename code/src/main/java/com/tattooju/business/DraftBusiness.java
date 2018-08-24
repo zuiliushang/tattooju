@@ -114,6 +114,7 @@ public class DraftBusiness {
 		if (type!=null) {
 			criteria.andEqualTo("type", type);
 		}
+		mediaExample.orderBy("rank").desc();
 		mediaExample.orderBy("createTime").desc();
 		return draftService.selectByExample(mediaExample, pageNum, pageSize);
 	}

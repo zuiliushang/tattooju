@@ -32,6 +32,12 @@ public class Media {
     private Byte type;
 
     /**
+     * 排序 大->小
+     */
+    @Column(name = "`rank`")
+    private Integer rank;
+
+    /**
      * 创建时间
      */
     @Column(name = "`create_time`")
@@ -113,6 +119,24 @@ public class Media {
      */
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    /**
+     * 获取排序 大->小
+     *
+     * @return rank - 排序 大->小
+     */
+    public Integer getRank() {
+        return rank;
+    }
+
+    /**
+     * 设置排序 大->小
+     *
+     * @param rank 排序 大->小
+     */
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     /**

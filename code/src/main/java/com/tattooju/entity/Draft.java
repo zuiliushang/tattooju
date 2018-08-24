@@ -38,6 +38,12 @@ public class Draft {
     private Date createTime;
 
     /**
+     * 排序 大->小
+     */
+    @Column(name = "`rank`")
+    private Integer rank;
+
+    /**
      * 用逗号隔开的tag
      */
     @Column(name = "`tag_content`")
@@ -131,6 +137,24 @@ public class Draft {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取排序 大->小
+     *
+     * @return rank - 排序 大->小
+     */
+    public Integer getRank() {
+        return rank;
+    }
+
+    /**
+     * 设置排序 大->小
+     *
+     * @param rank 排序 大->小
+     */
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     /**

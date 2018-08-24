@@ -89,6 +89,7 @@ public class ArticleBusiness {
 	public PageInfo<ArticleCommentDto> getArticleComment(int pageNum,int pageSize,int articleId){
 		PageHelper.startPage(pageNum, pageSize);
 		Example example = new Example(ArticleComment.class);
+		example.orderBy("rank").desc();
 		example.orderBy("createTime").desc();
 		List<ArticleComment> articleComments = articleCommentService.selectByExample(example);
 		PageInfo resuls = new PageInfo<>(articleComments);

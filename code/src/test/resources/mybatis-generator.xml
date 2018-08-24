@@ -95,8 +95,8 @@
 			<!--<table tableName="tbl_article_comment" domainObjectName="ArticleComment" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
 			identity="true" /></table>  -->
-			<table tableName="tbl_draft" domainObjectName="Draft" delimitIdentifiers="true"
+			<!-- <table tableName="tbl_draft" domainObjectName="Draft" delimitIdentifiers="true"
 			delimitAllColumns="true" enableInsert="true"> <generatedKey column="id" sqlStatement="Mysql"
-			identity="true" /></table>
+			identity="true" /></table> -->
 	</context>
 </generatorConfiguration>

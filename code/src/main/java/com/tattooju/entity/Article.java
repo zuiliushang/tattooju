@@ -26,6 +26,12 @@ public class Article {
     private String title;
 
     /**
+     * 排序 高的在前
+     */
+    @Column(name = "`rank`")
+    private Integer rank;
+
+    /**
      * 类型 1)活动 2)文章
      */
     @Column(name = "`type`")
@@ -101,6 +107,24 @@ public class Article {
      */
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    /**
+     * 获取排序 高的在前
+     *
+     * @return rank - 排序 高的在前
+     */
+    public Integer getRank() {
+        return rank;
+    }
+
+    /**
+     * 设置排序 高的在前
+     *
+     * @param rank 排序 高的在前
+     */
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     /**

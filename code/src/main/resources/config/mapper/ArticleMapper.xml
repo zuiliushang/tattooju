@@ -8,6 +8,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="cover_img" jdbcType="VARCHAR" property="coverImg" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />

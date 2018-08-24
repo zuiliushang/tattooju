@@ -9,6 +9,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="media_path" jdbcType="VARCHAR" property="mediaPath" />
     <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="tag_content" jdbcType="LONGVARCHAR" property="tagContent" />
   </resultMap>
