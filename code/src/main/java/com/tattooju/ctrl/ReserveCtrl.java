@@ -36,6 +36,7 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String mobile,
 			@RequestParam(required=true) String body,
 			@RequestParam(required=true) String content,
+			@RequestParam(required=true,defaultValue="0") Byte sex,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
 			@RequestHeader()String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
@@ -44,6 +45,7 @@ public class ReserveCtrl {
 		Integer accountId = JwtUtil.getUserId(JwtUtil.JWT_SECRET,token);
 		Reserve reserve = new Reserve();
 		reserve.setBody(body);
+		reserve.setSex(sex);
 		reserve.setContent(content);
 		reserve.setMobile(mobile);
 		reserve.setReserveTime(reserveTime);
@@ -61,6 +63,7 @@ public class ReserveCtrl {
 			@RequestParam(required=true) String mobile,
 			@RequestParam(required=true) String body,
 			@RequestParam(required=true) String content,
+			@RequestParam(required=true,defaultValue="0") Byte sex,
 			@RequestParam(required=true) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date reserveTime,
 			@RequestHeader()String token) throws Exception {
 		if (StringUtils.isEmpty(token)) {
@@ -69,6 +72,7 @@ public class ReserveCtrl {
 		Reserve reserve = new Reserve();
 		reserve.setId(id);
 		reserve.setBody(body);
+		reserve.setSex(sex);
 		reserve.setContent(content);
 		reserve.setMobile(mobile);
 		reserve.setReserveTime(reserveTime);

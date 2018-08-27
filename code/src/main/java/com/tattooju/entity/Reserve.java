@@ -62,6 +62,12 @@ public class Reserve {
     private Date updateTime;
 
     /**
+     * 性别0) 未知 1)男 2)女
+     */
+    @Column(name = "`sex`")
+    private Byte sex;
+
+    /**
      * 内容
      */
     @Column(name = "`content`")
@@ -227,6 +233,24 @@ public class Reserve {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取性别0) 未知 1)男 2)女
+     *
+     * @return sex - 性别0) 未知 1)男 2)女
+     */
+    public Byte getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置性别0) 女 1)男
+     *
+     * @param sex 性别0) 女 1)男
+     */
+    public void setSex(Byte sex) {
+        this.sex = sex;
     }
 
     /**

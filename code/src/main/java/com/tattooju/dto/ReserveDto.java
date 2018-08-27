@@ -28,6 +28,18 @@ public class ReserveDto {
 	
 	private String content;
 
+	private byte sex;
+	
+	
+	
+	public byte getSex() {
+		return sex;
+	}
+
+	public void setSex(byte sex) {
+		this.sex = sex;
+	}
+
 	public Integer getId() {
 		return id;
 	}

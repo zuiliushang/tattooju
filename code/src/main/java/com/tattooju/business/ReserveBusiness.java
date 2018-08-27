@@ -141,6 +141,7 @@ public class ReserveBusiness {
 		}
 		ReserveDto reserveDto = new ReserveDto();
 		reserveDto.setAccountId(reserve.getAccountId());
+		reserveDto.setSex(reserve.getSex());
 		reserveDto.setBody(reserve.getBody());
 		reserveDto.setContent(reserve.getContent());
 		reserveDto.setCreateTime(reserve.getCreateTime());
@@ -179,6 +180,7 @@ public class ReserveBusiness {
 			ReserveDto reserveDto = new ReserveDto();
 			reserveDto.setAccountId(reserve.getAccountId());
 			reserveDto.setBody(reserve.getBody());
+			reserveDto.setSex(reserve.getSex());
 			reserveDto.setContent(reserve.getContent());
 			reserveDto.setCreateTime(reserve.getCreateTime());
 			WechatAccount account = wechatAccountService.selectByKey(reserve.getAccountId());
