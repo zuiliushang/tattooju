@@ -1,5 +1,6 @@
 package com.tattooju.business;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -174,9 +175,11 @@ public class ReserveBusiness {
 			criteria.andEqualTo("accountId", accountId);
 		}
 		reserveExample.orderBy("createTime").desc();
-		PageHelper.startPage(pageNum, pageSize);
-		List<Reserve> reserves = reserveService.selectByExample(reserveExample);
-		List<ReserveDto> reserveDtos = reserves.stream().map(reserve->{
+		PageInfo pageInfo = reserveService.selectByExample(reserveExample,pageNum, pageSize);
+		List<ReserveDto> reserveDtos = new ArrayList<ReserveDto>();
+		pageInfo.getList().stream().forEach(re->{
+			Reserve reserve = (Reserve)re;
+			reserve = (Reserve)reserve;
 			ReserveDto reserveDto = new ReserveDto();
 			reserveDto.setAccountId(reserve.getAccountId());
 			reserveDto.setBody(reserve.getBody());
@@ -192,9 +195,11 @@ public class ReserveBusiness {
 			reserveDto.setStatus(reserve.getStatus());
 			reserveDto.setUpdateTime(reserve.getUpdateTime());
 			reserveDto.setWxAccount(reserve.getWxAccount());
-			return reserveDto;
-		}).collect(Collectors.toList());
-		return new PageInfo<>(reserveDtos);
+			reserveDtos.add(reserveDto);
+		});
+		pageInfo.setList(reserveDtos);
+		System.out.println("is last page ? => "+pageInfo.isIsLastPage());
+		return pageInfo;
 	}
 
 	public void updateReserveStatus(int id, Integer accountId, byte status) throws CommonException {

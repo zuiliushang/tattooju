@@ -23,7 +23,7 @@ public class MybatisGeneratorTest {
             boolean overwrite = true;
             ConfigurationParser cp = new ConfigurationParser(warnings);
             Configuration config = cp.parseConfiguration(
-            		MybatisGeneratorTest.class.getResourceAsStream("/mybatis-generator.xml"));
+            		MybatisGeneratorTest.class.getResourceAsStream("/generatorConfig.xml"));
             DefaultShellCallback callback = new DefaultShellCallback(overwrite);
             MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
             myBatisGenerator.generate(new ProgressCallback() {

@@ -79,6 +79,7 @@ public class ArticleBusiness {
 	public PageInfo<Article> getArticleList(int pageNum,int pageSize,Byte type){
 		Example articleExample = new Example(Article.class);
 		Criteria criteria = articleExample.createCriteria();
+		articleExample.orderBy("rank").desc();
 		if (type!=null) {
 			criteria.andEqualTo("type", type);
 		}
@@ -89,7 +90,6 @@ public class ArticleBusiness {
 	public PageInfo<ArticleCommentDto> getArticleComment(int pageNum,int pageSize,int articleId){
 		PageHelper.startPage(pageNum, pageSize);
 		Example example = new Example(ArticleComment.class);
-		example.orderBy("rank").desc();
 		example.orderBy("createTime").desc();
 		List<ArticleComment> articleComments = articleCommentService.selectByExample(example);
 		PageInfo resuls = new PageInfo<>(articleComments);
